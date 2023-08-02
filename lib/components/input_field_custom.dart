@@ -24,11 +24,11 @@ class InputFieldCustom extends StatelessWidget {
             labelText != ""
                 ? Container(
                     alignment: Alignment.centerLeft,
-                    padding: const EdgeInsets.all(5.0),
+                    padding: const EdgeInsets.only(left: 5, bottom: 2),
                     child: Text(
                       labelText,
                       style: const TextStyle(
-                        fontSize: 16.0,
+                        fontSize: 16,
                         color: Color(0xFF4E4E4E),
                       ),
                     ),
