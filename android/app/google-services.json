@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "46087624559",
+    "project_id": "bikerzone-d04c3",
+    "storage_bucket": "bikerzone-d04c3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:46087624559:android:1de00342dbaab89e8cfa9a",
+        "android_client_info": {
+          "package_name": "com.example.bikerzone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "46087624559-1sb7770q1leviqhsimh8nspbs4tnuma9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwMGrLfcTPSRL6GpzVr53whzgIaJ8I-9M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "46087624559-1sb7770q1leviqhsimh8nspbs4tnuma9.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "46087624559-3fmikqtv6h9vbu2g2u5airhkac07pkpe.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.bikerzone"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
