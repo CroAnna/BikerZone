@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class WhatsHotPage extends StatelessWidget {
+  const WhatsHotPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +11,7 @@ class HomePage extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              Text('Homepage'),
+              Text("What's hot"),
             ],
           ),
         ),
