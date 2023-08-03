@@ -5,13 +5,92 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Color(0xFFEAF2F4),
+    final screenWidth = MediaQuery.of(context).size.width;
+    final List<Map<String, dynamic>> itemsList;
+    itemsList = [
+      {"imgName": "motorbike", "text": "Nova grupna vožnja"},
+      {"imgName": "camera", "text": "Današnja slika"},
+      {"imgName": "rider", "text": "Prijatelji"},
+    ];
+
+    return Scaffold(
+      backgroundColor: const Color(0xFFEAF2F4),
       body: SafeArea(
         child: Center(
           child: Column(
             children: [
-              Text('Homepage'),
+              const Padding(
+                padding: EdgeInsets.only(top: 25, bottom: 15),
+                child: Text(
+                  'Dobrodošli natrag!',
+                  style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w400,
+                      color: Color(0xFF3F3F3F)),
+                ),
+              ),
+              Flexible(
+                child: ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: 3,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Column(
+                              children: [
+                                GestureDetector(
+                                  onTap: () => {},
+                                  child: Container(
+                                    padding: const EdgeInsets.only(
+                                        bottom: 20, top: 15),
+                                    width: screenWidth * 0.85,
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xFF528C9E),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(8),
+                                      ),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        SizedBox(
+                                          height: 120,
+                                          child: Image.asset(
+                                              'lib/images/${itemsList[index]["imgName"]}.png'),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 5),
+                                          child: Text(itemsList[index]["text"],
+                                              softWrap: true,
+                                              style: TextStyle(
+                                                fontSize: 24,
+                                                color: const Color(0xFFEFEFEF),
+                                                shadows: [
+                                                  Shadow(
+                                                    color: Colors.black
+                                                        .withOpacity(0.25),
+                                                    blurRadius: 4,
+                                                    offset: const Offset(0, 4),
+                                                  ),
+                                                ],
+                                              )),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              )
             ],
           ),
         ),
