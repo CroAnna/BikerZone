@@ -1,3 +1,4 @@
+import 'package:bikerzone/components/top_navigation_custom.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +17,10 @@ class ProfilePage extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              const Text('Profile page'),
+              const TopNavigationCustom(
+                  leftIcon: null,
+                  mainText: "Moje ime",
+                  rightIcon: Icons.settings),
               const SizedBox(
                 height: 10,
               ),
