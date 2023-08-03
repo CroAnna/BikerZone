@@ -1,3 +1,4 @@
+import 'package:bikerzone/components/ride_card_custom.dart';
 import 'package:flutter/material.dart';
 
 class FindRidePage extends StatelessWidget {
@@ -10,9 +11,7 @@ class FindRidePage extends StatelessWidget {
       body: SafeArea(
         child: Center(
           child: Column(
-            children: [
-              Text('Find a ride'),
-            ],
+            children: [RideCardCustom(), RideCardCustom()],
           ),
         ),
       ),

@@ -18,8 +18,9 @@ class _SkeletonPageState extends State<SkeletonPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: NavbarWidget(),
+    return MaterialApp(
+      home: const NavbarWidget(),
+      theme: ThemeData(fontFamily: 'Readex Pro'),
       debugShowCheckedModeBanner: false,
     );
   }
