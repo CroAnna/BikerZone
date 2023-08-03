@@ -1,3 +1,4 @@
+import 'package:bikerzone/components/semicircle_profile_custom.dart';
 import 'package:bikerzone/components/top_navigation_custom.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,10 @@ class ProfilePage extends StatelessWidget {
                   leftIcon: null,
                   mainText: "Moje ime",
                   rightIcon: Icons.settings),
+              SemicircleProfileCustom(
+                loggedUserId: FirebaseAuth.instance.currentUser?.uid,
+                isEdit: true,
+              ),
               const SizedBox(
                 height: 10,
               ),
