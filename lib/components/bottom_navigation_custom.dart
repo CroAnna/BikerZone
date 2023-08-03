@@ -9,7 +9,7 @@ List<Widget> _widgetOptions = <Widget>[
   const HomePage(),
   const FindRidePage(),
   const WhatsHotPage(),
-  const ProfilePage(),
+  ProfilePage(),
 ];
 
 Scaffold bottomNavigationCustom(
