@@ -7,7 +7,7 @@ import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 
 List<Widget> _widgetOptions = <Widget>[
   const HomePage(),
-  const FindRidePage(),
+  FindRidePage(),
   const WhatsHotPage(),
   ProfilePage(),
 ];
