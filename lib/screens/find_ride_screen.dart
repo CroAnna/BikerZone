@@ -1,14 +1,14 @@
-import 'package:bikerzone/components/filter_dropdown_custom.dart';
-import 'package:bikerzone/components/ride_card_custom.dart';
+import 'package:bikerzone/widgets/filter_dropdown_custom.dart';
+import 'package:bikerzone/widgets/ride_card_custom.dart';
 import 'package:flutter/material.dart';
 
-class FindRidePage extends StatefulWidget {
-  const FindRidePage({super.key});
+class FindRideScreen extends StatefulWidget {
+  const FindRideScreen({super.key});
   @override
-  State<FindRidePage> createState() => _FindRidePageState();
+  State<FindRideScreen> createState() => _FindRideScreenState();
 }
 
-class _FindRidePageState extends State<FindRidePage> {
+class _FindRideScreenState extends State<FindRideScreen> {
   bool isFilterShown = false;
 
   void _handleDataRecieved(bool filter) {

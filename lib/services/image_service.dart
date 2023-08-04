@@ -10,6 +10,7 @@ Future addUserImage(String imageUrl) async {
         .update({
       'image_url': imageUrl
     }); // set overwrites the entire document with the new data
+    // ignore: empty_catches
   } catch (e) {}
 }
 

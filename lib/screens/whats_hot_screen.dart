@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class WhatsHotPage extends StatelessWidget {
-  const WhatsHotPage({super.key});
+class WhatsHotScreen extends StatelessWidget {
+  const WhatsHotScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

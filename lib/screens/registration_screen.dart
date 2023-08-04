@@ -1,19 +1,19 @@
-import 'package:bikerzone/components/input_field_custom.dart';
-import 'package:bikerzone/components/large_button_custom.dart';
+import 'package:bikerzone/widgets/input_field_custom.dart';
+import 'package:bikerzone/widgets/large_button_custom.dart';
 import 'package:bikerzone/services/user_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class RegistrationPage extends StatefulWidget {
-  const RegistrationPage({super.key, required this.onTap});
+class RegistrationScreen extends StatefulWidget {
+  const RegistrationScreen({super.key, required this.onTap});
 
   final Function()? onTap;
 
   @override
-  State<RegistrationPage> createState() => _RegistrationPageState();
+  State<RegistrationScreen> createState() => _RegistrationScreenState();
 }
 
-class _RegistrationPageState extends State<RegistrationPage> {
+class _RegistrationScreenState extends State<RegistrationScreen> {
   final fullnameController = TextEditingController();
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
@@ -62,7 +62,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         showErrorMessage("Netočna lozinka.");
       } else if (error.code == 'weak-password') {
         showErrorMessage("Lozinka mora imati bar 6 znakova.");
-      }else if (error.code == 'email-already-in-use') {
+      } else if (error.code == 'email-already-in-use') {
         showErrorMessage("Već postoji korisnik s ovim emailom.");
       } else {
         showErrorMessage(error.code);

@@ -1,19 +1,19 @@
-import 'package:bikerzone/classes/User.dart';
-import 'package:bikerzone/components/semicircle_profile_custom.dart';
-import 'package:bikerzone/components/top_navigation_custom.dart';
-import 'package:bikerzone/components/user_data_custom.dart';
+import 'package:bikerzone/models/user.dart';
+import 'package:bikerzone/widgets/semicircle_profile_custom.dart';
+import 'package:bikerzone/widgets/top_navigation_custom.dart';
+import 'package:bikerzone/widgets/user_data_custom.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class ProfilePage extends StatefulWidget {
-  ProfilePage({super.key});
+class ProfileScreen extends StatefulWidget {
+  const ProfileScreen({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _ProfileScreenState extends State<ProfileScreen> {
   Stream<DocumentSnapshot>? _userStream;
   final CollectionReference _referenceUsers =
       FirebaseFirestore.instance.collection("users");

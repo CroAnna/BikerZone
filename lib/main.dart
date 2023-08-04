@@ -1,4 +1,4 @@
-import 'package:bikerzone/pages/auth_page.dart';
+import 'package:bikerzone/screens/auth_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -21,6 +21,6 @@ class MyApp extends StatelessWidget {
         title: 'BikerZone',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(fontFamily: 'Readex Pro'),
-        home: const AuthPage());
+        home: const AuthScreen());
   }
 }

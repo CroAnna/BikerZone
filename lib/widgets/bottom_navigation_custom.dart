@@ -1,15 +1,15 @@
-import 'package:bikerzone/pages/find_ride_page.dart';
-import 'package:bikerzone/pages/home_page.dart';
-import 'package:bikerzone/pages/profile_page.dart';
-import 'package:bikerzone/pages/whats_hot_page.dart';
+import 'package:bikerzone/screens/find_ride_screen.dart';
+import 'package:bikerzone/screens/home_screen.dart';
+import 'package:bikerzone/screens/profile_screen.dart';
+import 'package:bikerzone/screens/whats_hot_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 
 List<Widget> _widgetOptions = <Widget>[
-  const HomePage(),
-  FindRidePage(),
-  const WhatsHotPage(),
-  ProfilePage(),
+  const HomeScreen(),
+  const FindRideScreen(),
+  const WhatsHotScreen(),
+  const ProfileScreen(),
 ];
 
 Scaffold bottomNavigationCustom(
