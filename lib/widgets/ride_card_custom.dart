@@ -1,4 +1,6 @@
 import 'package:bikerzone/models/ride.dart';
+import 'package:bikerzone/models/user.dart';
+import 'package:bikerzone/services/general_service.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -128,21 +130,21 @@ class _RideCardCustomState extends State<RideCardCustom> {
                           bottomLeft: Radius.circular(16)),
                       color: Color(0xFFDEDEDE),
                     ),
-                    child: const Padding(
-                      padding: EdgeInsets.only(
-                          top: 10, bottom: 10, left: 15, right: 10),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          top: 10, bottom: 10, left: 15, right: 5),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.two_wheeler,
                             color: Color(0xFFA41723),
                             size: 32,
                           ),
-                          SizedBox(width: 5),
+                          const SizedBox(width: 10),
                           Text(
-                            "Sve primamo",
-                            style: TextStyle(
+                            widget.ride.acceptType,
+                            style: const TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 16,
                               color: Color(0xFF444444),
@@ -179,16 +181,40 @@ class _RideCardCustomState extends State<RideCardCustom> {
                   Row(
                     children: [
                       Padding(
-                        padding: const EdgeInsets.only(right: 8, left: 15),
-                        child: CircleAvatar(
-                          radius: screenWidth / 20,
-                          backgroundImage:
-                              // imageUrl != null ? NetworkImage(imageUrl) as ImageProvider<Object> :
-                              const AssetImage('lib/images/no_image.jpg'),
+                        padding: const EdgeInsets.only(right: 5, left: 15),
+                        child: FutureBuilder(
+                          future: getDocumentByIdEveryType(
+                              "users",
+                              widget.ride.userId,
+                              (snapshot) => UserC.fromDocument(snapshot)),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            }
+                            if (snapshot.hasData) {
+                              final data = snapshot.data!;
+                              return Row(
+                                children: [
+                                  CircleAvatar(
+                                    radius: screenWidth / 20,
+                                    backgroundImage: data.imageUrl !=
+                                            null // TODO fix if user has no image
+                                        ? NetworkImage(data.imageUrl)
+                                            as ImageProvider<Object>
+                                        : const AssetImage(
+                                            'lib/images/no_image.jpg'),
+                                  ),
+                                  Text("  ${data.username}"),
+                                ],
+                              );
+                            } else {
+                              return const Text("Error - user not found");
+                            }
+                          },
                         ),
                       ),
-                      const Text("Marko"),
-                      const Text(" + 3")
+                      Text("+ ${widget.ride.maxPeople}")
                     ],
                   ),
                   const SizedBox(height: 5),
