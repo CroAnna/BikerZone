@@ -1,5 +1,7 @@
 import 'package:bikerzone/models/ride.dart';
+import 'package:bikerzone/models/user.dart';
 import 'package:bikerzone/screens/ride_details_screen.dart';
+import 'package:bikerzone/services/general_service.dart';
 import 'package:bikerzone/widgets/filter_dropdown_custom.dart';
 import 'package:bikerzone/widgets/ride_card_custom.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -31,46 +33,73 @@ class _FindRideScreenState extends State<FindRideScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: const Color(0xFFEAF2F4),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
-            child: Column(children: [
-              OfferOverviewCustom(
-                  isFilterShown: isFilterShown,
-                  onDataRecieved: _handleDataRecieved),
-              Visibility(
-                visible: isFilterShown,
-                child: const FilterDropdownCustom(),
-              ),
-              SizedBox(
-                height: 500, // TODO fix
-                child: StreamBuilder(
-                  stream: _streamRides,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    }
+            child: Column(
+              children: [
+                OfferOverviewCustom(
+                    isFilterShown: isFilterShown,
+                    onDataRecieved: _handleDataRecieved),
+                Visibility(
+                  visible: isFilterShown,
+                  child: const FilterDropdownCustom(),
+                ),
+                SizedBox(
+                  height: 500, // TODO fix
+                  child: StreamBuilder(
+                    stream: _streamRides,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      }
 
-                    if (!snapshot.hasData) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
+                      if (!snapshot.hasData) {
+                        return Text('Loading...');
+                      }
 
-                    final rides = snapshot.data!.docs.map((doc) {
-                      return Ride.fromDocument(doc);
-                    }).toList();
+                      final rides = snapshot.data!.docs.map((doc) {
+                        return Ride.fromDocument(doc);
+                      }).toList();
 
-                    return ListView.builder(
+                      return ListView.builder(
                         itemCount: rides.length,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
-                          return RideCardCustom(ride: rides[index]);
-                        });
-                  },
+                          return FutureBuilder(
+                            future: getDocumentByIdEveryType(
+                              "users",
+                              rides[index].userId,
+                              (snapshot) => UserC.fromDocument(snapshot),
+                            ),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return const SizedBox(
+                                  width: 0,
+                                );
+                              }
+                              if (snapshot.hasData) {
+                                final data = snapshot.data!;
+                                return RideCardCustom(
+                                    ride: rides[index], user: data);
+                              } else {
+                                return const SizedBox(
+                                  width: 0,
+                                );
+                              }
+                            },
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ]),
+              ],
+            ),
           ),
         ),
       ),

@@ -8,8 +8,9 @@ import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
 class RideCardCustom extends StatefulWidget {
-  RideCardCustom({super.key, required this.ride});
+  RideCardCustom({super.key, required this.ride, required this.user});
   Ride ride;
+  UserC user;
 
   @override
   State<RideCardCustom> createState() => _RideCardCustomState();
@@ -26,13 +27,16 @@ class _RideCardCustomState extends State<RideCardCustom> {
         Navigator.push(
           context,
           UnanimatedRoute(
-            builder: (context) => const RideDetailsScreen(),
+            builder: (context) => RideDetailsScreen(
+              ride: widget.ride,
+              user: widget.user,
+            ),
           ),
         )
       },
       child: Container(
         height: 200,
-        margin: const EdgeInsets.all(15),
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         width: cardWidth,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
@@ -191,36 +195,18 @@ class _RideCardCustomState extends State<RideCardCustom> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: 5, left: 15),
-                        child: FutureBuilder(
-                          future: getDocumentByIdEveryType(
-                              "users",
-                              widget.ride.userId,
-                              (snapshot) => UserC.fromDocument(snapshot)),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const CircularProgressIndicator();
-                            }
-                            if (snapshot.hasData) {
-                              final data = snapshot.data!;
-                              return Row(
-                                children: [
-                                  CircleAvatar(
-                                    radius: screenWidth / 20,
-                                    backgroundImage: data.imageUrl !=
-                                            null // TODO fix if user has no image
-                                        ? NetworkImage(data.imageUrl)
-                                            as ImageProvider<Object>
-                                        : const AssetImage(
-                                            'lib/images/no_image.jpg'),
-                                  ),
-                                  Text("  ${data.username}"),
-                                ],
-                              );
-                            } else {
-                              return const Text("Error - user not found");
-                            }
-                          },
+                        child: Row(
+                          children: [
+                            CircleAvatar(
+                              radius: screenWidth / 20,
+                              backgroundImage: widget.user.imageUrl !=
+                                      null // TODO fix if user has no image
+                                  ? NetworkImage(widget.user.imageUrl)
+                                      as ImageProvider<Object>
+                                  : const AssetImage('lib/images/no_image.jpg'),
+                            ),
+                            Text("  ${widget.user.username}"),
+                          ],
                         ),
                       ),
                       Text("+ ${widget.ride.maxPeople}")
