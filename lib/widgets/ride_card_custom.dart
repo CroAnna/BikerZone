@@ -1,8 +1,17 @@
+import 'package:bikerzone/models/ride.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class RideCardCustom extends StatelessWidget {
-  const RideCardCustom({super.key});
+// ignore: must_be_immutable
+class RideCardCustom extends StatefulWidget {
+  RideCardCustom({super.key, required this.ride});
+  Ride ride;
 
+  @override
+  State<RideCardCustom> createState() => _RideCardCustomState();
+}
+
+class _RideCardCustomState extends State<RideCardCustom> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -30,19 +39,19 @@ class RideCardCustom extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             SizedBox(
-              width: cardWidth * 0.5,
+              width: cardWidth * 0.55,
               child: Row(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(15),
+                    padding: const EdgeInsets.all(10),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Padding(
-                          padding: EdgeInsets.only(left: 8),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8),
                           child: Text(
-                            "11:00",
-                            style: TextStyle(
+                            DateFormat('HH:mm').format(widget.ride.startDaT),
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                               color: Color(0xFF444444),
@@ -56,11 +65,11 @@ class RideCardCustom extends StatelessWidget {
                             height: 50,
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.only(left: 8),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8),
                           child: Text(
-                            "15:00",
-                            style: TextStyle(
+                            DateFormat('HH:mm').format(widget.ride.finishDaT),
+                            style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
                               color: Color(0xFF444444),
@@ -70,42 +79,45 @@ class RideCardCustom extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Karlovac",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20,
-                          color: Color(0xFF444444),
+                  SizedBox(
+                    width: cardWidth * 0.32,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          widget.ride.startingPoint,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 18,
+                            color: Color(0xFF444444),
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 20),
-                      Text(
-                        "...",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 20,
-                          color: Color(0xFF444444),
+                        const SizedBox(height: 20),
+                        const Text(
+                          "...",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20,
+                            color: Color(0xFF444444),
+                          ),
                         ),
-                      ),
-                      SizedBox(height: 20),
-                      Text(
-                        "Varaždin",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 20,
-                          color: Color(0xFF444444),
+                        const SizedBox(height: 20),
+                        Text(
+                          widget.ride.finishingPoint,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 18,
+                            color: Color(0xFF444444),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
             SizedBox(
-              width: cardWidth * 0.5,
+              width: cardWidth * 0.45,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -118,7 +130,7 @@ class RideCardCustom extends StatelessWidget {
                     ),
                     child: const Padding(
                       padding: EdgeInsets.only(
-                          top: 10, bottom: 10, left: 15, right: 20),
+                          top: 10, bottom: 10, left: 15, right: 10),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -140,22 +152,22 @@ class RideCardCustom extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 20),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          "• bez autoceste",
-                          style: TextStyle(
+                          "• ${widget.ride.highway ? "autocesta" : "bez autoceste"}",
+                          style: const TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 14,
                             color: Color(0xFF444444),
                           ),
                         ),
                         Text(
-                          "• srednji tempo",
-                          style: TextStyle(
+                          "• ${widget.ride.pace}",
+                          style: const TextStyle(
                             fontWeight: FontWeight.w400,
                             fontSize: 14,
                             color: Color(0xFF444444),

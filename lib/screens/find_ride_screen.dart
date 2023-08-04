@@ -1,5 +1,9 @@
+import 'dart:math';
+
+import 'package:bikerzone/models/ride.dart';
 import 'package:bikerzone/widgets/filter_dropdown_custom.dart';
 import 'package:bikerzone/widgets/ride_card_custom.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class FindRideScreen extends StatefulWidget {
@@ -10,6 +14,15 @@ class FindRideScreen extends StatefulWidget {
 
 class _FindRideScreenState extends State<FindRideScreen> {
   bool isFilterShown = false;
+  final CollectionReference _referenceRides =
+      FirebaseFirestore.instance.collection('rides');
+  late Stream<QuerySnapshot> _streamRides;
+
+  @override
+  void initState() {
+    super.initState();
+    _streamRides = _referenceRides.snapshots();
+  }
 
   void _handleDataRecieved(bool filter) {
     setState(() {
@@ -32,11 +45,32 @@ class _FindRideScreenState extends State<FindRideScreen> {
                 visible: isFilterShown,
                 child: const FilterDropdownCustom(),
               ),
-              const RideCardCustom(),
-              const RideCardCustom(),
-              const RideCardCustom(),
-              const RideCardCustom(),
-              const RideCardCustom()
+              SizedBox(
+                height: 500, // TODO fix
+                child: StreamBuilder(
+                  stream: _streamRides,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    }
+
+                    if (!snapshot.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    final rides = snapshot.data!.docs.map((doc) {
+                      return Ride.fromDocument(doc);
+                    }).toList();
+
+                    return ListView.builder(
+                        itemCount: rides.length,
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          return RideCardCustom(ride: rides[index]);
+                        });
+                  },
+                ),
+              ),
             ]),
           ),
         ),
