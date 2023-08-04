@@ -65,7 +65,7 @@ class _RideCardCustomState extends State<RideCardCustom> {
                         Padding(
                           padding: const EdgeInsets.only(left: 8),
                           child: Text(
-                            DateFormat('HH:mm').format(widget.ride.startDaT),
+                            DateFormat('H:mm').format(widget.ride.startDaT),
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
@@ -83,7 +83,7 @@ class _RideCardCustomState extends State<RideCardCustom> {
                         Padding(
                           padding: const EdgeInsets.only(left: 8),
                           child: Text(
-                            DateFormat('HH:mm').format(widget.ride.finishDaT),
+                            DateFormat('H:mm').format(widget.ride.finishDaT),
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 20,
