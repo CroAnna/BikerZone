@@ -1,6 +1,8 @@
 import 'package:bikerzone/models/ride.dart';
 import 'package:bikerzone/models/user.dart';
+import 'package:bikerzone/screens/ride_details_screen.dart';
 import 'package:bikerzone/services/general_service.dart';
+import 'package:bikerzone/widgets/unanimated_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -20,7 +22,14 @@ class _RideCardCustomState extends State<RideCardCustom> {
     final cardWidth = screenWidth * 0.92;
 
     return GestureDetector(
-      onTap: () => {},
+      onTap: () => {
+        Navigator.push(
+          context,
+          UnanimatedRoute(
+            builder: (context) => const RideDetailsScreen(),
+          ),
+        )
+      },
       child: Container(
         height: 200,
         margin: const EdgeInsets.all(15),
@@ -82,7 +91,7 @@ class _RideCardCustomState extends State<RideCardCustom> {
                     ),
                   ),
                   SizedBox(
-                    width: cardWidth * 0.32,
+                    width: cardWidth * 0.30,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -90,7 +99,7 @@ class _RideCardCustomState extends State<RideCardCustom> {
                           widget.ride.startingPoint,
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
-                            fontSize: 18,
+                            fontSize: 16,
                             color: Color(0xFF444444),
                           ),
                         ),
@@ -108,7 +117,7 @@ class _RideCardCustomState extends State<RideCardCustom> {
                           widget.ride.finishingPoint,
                           style: const TextStyle(
                             fontWeight: FontWeight.w500,
-                            fontSize: 18,
+                            fontSize: 16,
                             color: Color(0xFF444444),
                           ),
                         ),

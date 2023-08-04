@@ -1,4 +1,5 @@
 import 'package:bikerzone/models/ride.dart';
+import 'package:bikerzone/screens/ride_details_screen.dart';
 import 'package:bikerzone/widgets/filter_dropdown_custom.dart';
 import 'package:bikerzone/widgets/ride_card_custom.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
