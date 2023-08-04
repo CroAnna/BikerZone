@@ -1,3 +1,4 @@
+import 'package:bikerzone/components/filter_dropdown_custom.dart';
 import 'package:bikerzone/components/ride_card_custom.dart';
 import 'package:flutter/material.dart';
 
@@ -21,18 +22,23 @@ class _FindRidePageState extends State<FindRidePage> {
     return Scaffold(
       backgroundColor: const Color(0xFFEAF2F4),
       body: SafeArea(
-        child: Center(
-          child: Column(children: [
-            OfferOverviewCustom(
-                isFilterShown: isFilterShown,
-                onDataRecieved: _handleDataRecieved),
-            Visibility(
-              visible: isFilterShown,
-              child: Text("nekja"),
-            ),
-            const RideCardCustom(),
-            const RideCardCustom()
-          ]),
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(children: [
+              OfferOverviewCustom(
+                  isFilterShown: isFilterShown,
+                  onDataRecieved: _handleDataRecieved),
+              Visibility(
+                visible: isFilterShown,
+                child: const FilterDropdownCustom(),
+              ),
+              const RideCardCustom(),
+              const RideCardCustom(),
+              const RideCardCustom(),
+              const RideCardCustom(),
+              const RideCardCustom()
+            ]),
+          ),
         ),
       ),
     );
