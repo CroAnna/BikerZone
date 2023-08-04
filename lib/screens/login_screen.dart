@@ -1,18 +1,18 @@
-import 'package:bikerzone/components/input_field_custom.dart';
-import 'package:bikerzone/components/large_button_custom.dart';
+import 'package:bikerzone/widgets/input_field_custom.dart';
+import 'package:bikerzone/widgets/large_button_custom.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({super.key, required this.onTap});
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({super.key, required this.onTap});
 
   final Function()? onTap;
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 

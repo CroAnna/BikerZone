@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class HomePage extends StatelessWidget {
                                   onTap: () => {},
                                   child: Container(
                                     padding: const EdgeInsets.only(
-                                        bottom: 20, top: 15),
+                                        bottom: 10, top: 5),
                                     width: screenWidth * 0.85,
                                     decoration: const BoxDecoration(
                                       color: Color(0xFF528C9E),

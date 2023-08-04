@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class FindRidePage extends StatelessWidget {
-  const FindRidePage({super.key});
+class WhatsHotScreen extends StatelessWidget {
+  const WhatsHotScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +11,7 @@ class FindRidePage extends StatelessWidget {
         child: Center(
           child: Column(
             children: [
-              Text('Find a ride'),
+              Text("What's hot"),
             ],
           ),
         ),

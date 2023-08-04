@@ -1,14 +1,14 @@
-import 'package:bikerzone/components/bottom_navigation_custom.dart';
+import 'package:bikerzone/widgets/bottom_navigation_custom.dart';
 import 'package:flutter/material.dart';
 
-class SkeletonPage extends StatefulWidget {
-  const SkeletonPage({Key? key}) : super(key: key);
+class SkeletonScreen extends StatefulWidget {
+  const SkeletonScreen({Key? key}) : super(key: key);
 
   @override
-  State<SkeletonPage> createState() => _SkeletonPageState();
+  State<SkeletonScreen> createState() => _SkeletonScreenState();
 }
 
-class _SkeletonPageState extends State<SkeletonPage> {
+class _SkeletonScreenState extends State<SkeletonScreen> {
   Future<String>? userRole;
 
   @override
@@ -18,8 +18,9 @@ class _SkeletonPageState extends State<SkeletonPage> {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: NavbarWidget(),
+    return MaterialApp(
+      home: const NavbarWidget(),
+      theme: ThemeData(fontFamily: 'Readex Pro'),
       debugShowCheckedModeBanner: false,
     );
   }
