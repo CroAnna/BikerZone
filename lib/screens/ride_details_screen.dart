@@ -4,14 +4,32 @@ import 'package:bikerzone/services/user_service.dart';
 import 'package:bikerzone/widgets/large_button_custom.dart';
 import 'package:bikerzone/widgets/stop_points_custom.dart';
 import 'package:bikerzone/widgets/top_navigation_custom.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
-class RideDetailsScreen extends StatelessWidget {
+class RideDetailsScreen extends StatefulWidget {
   RideDetailsScreen({super.key, required this.ride, required this.user});
   Ride ride;
   UserC user;
+
+  @override
+  State<RideDetailsScreen> createState() => _RideDetailsScreenState();
+}
+
+class _RideDetailsScreenState extends State<RideDetailsScreen> {
+  late Stream<QuerySnapshot> _streamRiders;
+
+  @override
+  void initState() {
+    super.initState();
+    _streamRiders = FirebaseFirestore.instance
+        .collection('rides')
+        .doc(widget.ride.id)
+        .collection('riders')
+        .snapshots();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,11 +45,18 @@ class RideDetailsScreen extends StatelessWidget {
                   leftIcon: Icons.arrow_back,
                   mainText: "Detalji",
                   rightIcon: null),
-              DetailsCard1(screenWidth: screenWidth, ride: ride, user: user),
-              DetailsCard2(screenWidth: screenWidth, ride: ride, user: user),
-              DetailsCard3(screenWidth: screenWidth, ride: ride),
-              StopPointsCustom(screenWidth: screenWidth, ride: ride),
-              DetailsCard4(screenWidth: screenWidth),
+              DetailsCard1(
+                  screenWidth: screenWidth,
+                  ride: widget.ride,
+                  user: widget.user),
+              DetailsCard2(
+                  screenWidth: screenWidth,
+                  ride: widget.ride,
+                  user: widget.user),
+              DetailsCard3(screenWidth: screenWidth, ride: widget.ride),
+              StopPointsCustom(screenWidth: screenWidth, ride: widget.ride),
+              DetailsCard4(
+                  screenWidth: screenWidth, streamRiders: _streamRiders),
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 20),
                 child: const LargeButtonCustom(
@@ -309,7 +334,6 @@ class DetailsCard3 extends StatelessWidget {
             ? "Prihvaćamo sve tipove motora"
             : "Preferiramo tip ${ride.acceptType}"
       },
-      {"icon": Icons.info_outline, "text": ride.exactStartingPoint},
       {
         "icon": Icons.people_alt,
         "text": "Max broj ljudi u grupi: ${ride.maxPeople}"
@@ -317,7 +341,7 @@ class DetailsCard3 extends StatelessWidget {
       {"icon": Icons.speed, "text": ride.pace},
     ];
     return Container(
-      height: 250,
+      height: 210,
       width: screenWidth * 0.9,
       decoration: BoxDecoration(
         color: const Color(0xFFEEEEEE),
@@ -373,29 +397,13 @@ class DetailsCard3 extends StatelessWidget {
 }
 
 class DetailsCard4 extends StatelessWidget {
-  const DetailsCard4({super.key, required this.screenWidth});
+  const DetailsCard4(
+      {super.key, required this.screenWidth, required this.streamRiders});
   final double screenWidth;
+  final dynamic streamRiders;
 
   @override
   Widget build(BuildContext context) {
-    final List<Map<String, dynamic>> helpRiders;
-    helpRiders = [
-      {
-        "name": "JHorvat123",
-        "bike": "BMW R 1250 GS",
-        "image": "lib/images/no_image.jpg"
-      },
-      {
-        "name": "JTest123",
-        "bike": "Honda CBR 1500",
-        "image": "lib/images/helmet.png"
-      },
-      {
-        "name": "JMIki123",
-        "bike": "Tomos APN 6S",
-        "image": "lib/images/no_image.jpg"
-      }
-    ];
     return Container(
       width: screenWidth * 0.9,
       decoration: BoxDecoration(
@@ -446,76 +454,127 @@ class DetailsCard4 extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(
-            height: helpRiders.length * 91,
-            child: ListView.builder(
-                itemCount: helpRiders.length,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          right: 0,
-                          child: Container(
-                            height: 70,
-                            alignment: Alignment.centerLeft,
-                            width: screenWidth * 0.7,
-                            decoration: BoxDecoration(
-                                color: const Color(0xFFEAEAEA),
-                                border: Border.all(
-                                    color: const Color(0xFF0276B4), width: 2),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: const Color(0xFF0276B4)
-                                        .withOpacity(0.5),
-                                    blurRadius: 4,
-                                    offset: const Offset(0, 4),
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(16)),
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 35),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text(
-                                    helpRiders[index]['name'],
-                                    style: const TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.w600,
-                                        color: Color(0xFF444444)),
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.two_wheeler,
-                                        size: 24,
-                                        color: Color(0xFF0276B4),
-                                      ),
-                                      const SizedBox(width: 5),
-                                      Text(helpRiders[index]['bike']),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                        CircleAvatar(
-                          radius: 35,
-                          backgroundImage:
-                              AssetImage(helpRiders[index]['image']),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
-          )
+          StreamBuilder<QuerySnapshot>(
+              stream: streamRiders,
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text(snapshot.error.toString());
+                }
+                if (!snapshot.hasData) {
+                  return const CircularProgressIndicator();
+                }
+                final riders = snapshot.data!.docs;
+
+                return SizedBox(
+                  height: riders.isEmpty ? 60 : riders.length * 91,
+                  child: riders.isEmpty
+                      ? const Center(
+                          child:
+                              Text("Još nema drugih bajkera na ovoj vožnji."))
+                      : ListView.builder(
+                          itemCount: riders.length,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            final riderRef =
+                                riders[index]['user_id'] as DocumentReference;
+
+                            return FutureBuilder<DocumentSnapshot>(
+                              future: riderRef.get(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return const CircularProgressIndicator();
+                                }
+
+                                if (snapshot.hasData && snapshot.data!.exists) {
+                                  final riderObject =
+                                      UserC.fromDocument(snapshot.data!);
+
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 10),
+                                    child: Stack(
+                                      children: [
+                                        Positioned(
+                                          right: 0,
+                                          child: Container(
+                                            height: 70,
+                                            alignment: Alignment.centerLeft,
+                                            width: screenWidth * 0.7,
+                                            decoration: BoxDecoration(
+                                                color: const Color(0xFFEAEAEA),
+                                                border: Border.all(
+                                                    color:
+                                                        const Color(0xFF0276B4),
+                                                    width: 2),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    color:
+                                                        const Color(0xFF0276B4)
+                                                            .withOpacity(0.5),
+                                                    blurRadius: 4,
+                                                    offset: const Offset(0, 4),
+                                                  )
+                                                ],
+                                                borderRadius:
+                                                    BorderRadius.circular(16)),
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  left: 35),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  Text(
+                                                    riderObject.username,
+                                                    style: const TextStyle(
+                                                        fontSize: 18,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color:
+                                                            Color(0xFF444444)),
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      const Icon(
+                                                        Icons.two_wheeler,
+                                                        size: 24,
+                                                        color:
+                                                            Color(0xFF0276B4),
+                                                      ),
+                                                      const SizedBox(width: 5),
+                                                      Text(riderObject.bike),
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        CircleAvatar(
+                                          radius: 35,
+                                          backgroundImage: riderObject
+                                                  .imageUrl.isNotEmpty
+                                              ? NetworkImage(
+                                                      riderObject.imageUrl)
+                                                  as ImageProvider<Object>
+                                              : const AssetImage(
+                                                  'lib/images/no_image.jpg'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                } else {
+                                  return const Text('User not found');
+                                }
+                              },
+                            );
+                          }),
+                );
+              })
         ],
       ),
     );
