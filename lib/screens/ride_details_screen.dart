@@ -13,6 +13,26 @@ class RideDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final List<Map<String, dynamic>> itemsList;
+    itemsList = [
+      {"icon": Icons.location_on, "text": ride.exactStartingPoint},
+      {
+        "icon": Icons.add_road,
+        "text": ride.highway ? "Putujemo autocestom" : "Ne putujemo autocestom"
+      },
+      {
+        "icon": Icons.two_wheeler,
+        "text": ride.acceptType == "Svi motori"
+            ? "Prihvaćamo sve tipove motora"
+            : "Preferiramo tip ${ride.acceptType}"
+      },
+      {"icon": Icons.info_outline, "text": ride.exactStartingPoint},
+      {
+        "icon": Icons.people_alt,
+        "text": "Max broj ljudi u grupi: ${ride.maxPeople}"
+      },
+      {"icon": Icons.speed, "text": ride.pace},
+    ];
 
     return Scaffold(
       backgroundColor: const Color(0xFFEAF2F4),
@@ -26,6 +46,7 @@ class RideDetailsScreen extends StatelessWidget {
                 rightIcon: null),
             DetailsCard1(screenWidth: screenWidth, ride: ride, user: user),
             DetailsCard2(screenWidth: screenWidth, ride: ride, user: user),
+            DetailsCard3(screenWidth: screenWidth, itemsList: itemsList),
           ],
         ),
       )),
@@ -268,6 +289,74 @@ class DetailsCard2 extends StatelessWidget {
             ),
           )
         ],
+      ),
+    );
+  }
+}
+
+class DetailsCard3 extends StatelessWidget {
+  const DetailsCard3({
+    super.key,
+    required this.screenWidth,
+    required this.itemsList,
+  });
+
+  final double screenWidth;
+  final dynamic itemsList;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 250,
+      width: screenWidth * 0.9,
+      decoration: BoxDecoration(
+        color: const Color(0xFFEEEEEE),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 4,
+            offset: const Offset(2, 4),
+          )
+        ],
+      ),
+      margin: const EdgeInsets.only(top: 20),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+        child: Column(
+          children: [
+            Flexible(
+              child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: itemsList.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    child: Row(
+                      children: [
+                        Icon(
+                          itemsList[index]["icon"],
+                          color: const Color(0xFFA41723),
+                          size: 30,
+                        ),
+                        const SizedBox(width: 10.0),
+                        Expanded(
+                          child: Text(
+                            itemsList[index]["text"],
+                            softWrap: true,
+                            style: const TextStyle(
+                                fontSize: 16, color: Color(0xFF444444)),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
