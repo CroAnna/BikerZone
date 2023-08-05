@@ -7,15 +7,16 @@ class UserC {
   final String description;
   final String email;
   final String username;
+  final DateTime birthday;
 
-  UserC({
-    required this.fullname,
-    required this.imageUrl,
-    required this.uid,
-    required this.description,
-    required this.email,
-    required this.username,
-  });
+  UserC(
+      {required this.fullname,
+      required this.imageUrl,
+      required this.uid,
+      required this.description,
+      required this.email,
+      required this.username,
+      required this.birthday});
 
   factory UserC.fromDocument(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
@@ -25,14 +26,15 @@ class UserC {
     final description = data['description'] as String;
     final email = data['email'] as String;
     final username = data['username'] as String;
+    final birthday = (data['birthday'] as Timestamp).toDate();
 
     return UserC(
-      fullname: fullname,
-      imageUrl: imageUrl,
-      uid: uid,
-      description: description,
-      email: email,
-      username: username,
-    );
+        fullname: fullname,
+        imageUrl: imageUrl,
+        uid: uid,
+        description: description,
+        email: email,
+        username: username,
+        birthday: birthday);
   }
 }
