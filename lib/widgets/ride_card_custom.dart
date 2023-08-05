@@ -198,8 +198,7 @@ class _RideCardCustomState extends State<RideCardCustom> {
                           children: [
                             CircleAvatar(
                               radius: screenWidth / 20,
-                              backgroundImage: widget.user.imageUrl !=
-                                      null // TODO fix if user has no image
+                              backgroundImage: widget.user.imageUrl.isNotEmpty
                                   ? NetworkImage(widget.user.imageUrl)
                                       as ImageProvider<Object>
                                   : const AssetImage('lib/images/no_image.jpg'),

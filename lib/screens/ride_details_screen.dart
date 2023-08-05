@@ -1,5 +1,6 @@
 import 'package:bikerzone/models/ride.dart';
 import 'package:bikerzone/models/user.dart';
+import 'package:bikerzone/services/user_service.dart';
 import 'package:bikerzone/widgets/large_button_custom.dart';
 import 'package:bikerzone/widgets/stop_points_custom.dart';
 import 'package:bikerzone/widgets/top_navigation_custom.dart';
@@ -181,7 +182,7 @@ class DetailsCard1 extends StatelessWidget {
                               fontWeight: FontWeight.w400),
                         ),
                         Text(
-                          "${user.fullname}, 20", // TODO add birthday field to firebase and model
+                          "${user.fullname}, ${calculateYears(user.birthday)}",
                           style: const TextStyle(
                               color: Color(0xFF444444),
                               fontSize: 16,

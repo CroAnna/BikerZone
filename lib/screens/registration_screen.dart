@@ -1,3 +1,4 @@
+import 'package:bikerzone/widgets/input_date_custom.dart';
 import 'package:bikerzone/widgets/input_field_custom.dart';
 import 'package:bikerzone/widgets/large_button_custom.dart';
 import 'package:bikerzone/services/user_service.dart';
@@ -19,6 +20,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final passwordController = TextEditingController();
   final confirmPaswordController = TextEditingController();
   final emailController = TextEditingController();
+  DateTime? birthdayController;
 
   bool? _isChecked = false;
 
@@ -48,8 +50,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           email: emailController.text,
           password: passwordController.text,
         );
-        addUserDetails(fullnameController.text, usernameController.text,
-            emailController.text, userCredential.user!.uid);
+        addUserDetails(
+            fullnameController.text,
+            usernameController.text,
+            emailController.text,
+            birthdayController!,
+            userCredential.user!.uid);
 
         // ignore: use_build_context_synchronously
         Navigator.pop(context);
@@ -85,6 +91,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         );
       },
     );
+  }
+
+  void _handleDataReceived(DateTime date) {
+    setState(() {
+      birthdayController = date;
+    });
   }
 
   @override
@@ -125,6 +137,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       controller: emailController,
                       hintText: "Unesi e-mail...",
                       hide: false,
+                    ),
+                    InputDateCustom(
+                      labelText: "Datum rođenja:",
+                      onDataReceived: _handleDataReceived,
+                      hintText: "Datum rođenja",
+                      futureDateAllowed: false,
                     ),
                     InputFieldCustom(
                       labelText: "Lozinka:",

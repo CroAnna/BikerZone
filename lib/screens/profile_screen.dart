@@ -73,7 +73,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             "icon": Icons.two_wheeler,
                             "text": "TODO Yamaha MT-07"
                           },
-                          {"icon": Icons.description, "text": user.description},
+                          {
+                            "icon": Icons.description,
+                            "text": user.description.isNotEmpty
+                                ? user.description
+                                : "-"
+                          },
                         ]),
                         GestureDetector(
                           onTap: signOut,
