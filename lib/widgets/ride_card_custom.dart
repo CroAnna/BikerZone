@@ -1,7 +1,6 @@
 import 'package:bikerzone/models/ride.dart';
 import 'package:bikerzone/models/user.dart';
 import 'package:bikerzone/screens/ride_details_screen.dart';
-import 'package:bikerzone/services/general_service.dart';
 import 'package:bikerzone/widgets/unanimated_route.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

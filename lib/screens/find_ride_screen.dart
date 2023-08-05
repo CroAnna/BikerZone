@@ -1,6 +1,5 @@
 import 'package:bikerzone/models/ride.dart';
 import 'package:bikerzone/models/user.dart';
-import 'package:bikerzone/screens/ride_details_screen.dart';
 import 'package:bikerzone/services/general_service.dart';
 import 'package:bikerzone/widgets/filter_dropdown_custom.dart';
 import 'package:bikerzone/widgets/ride_card_custom.dart';
@@ -33,8 +32,6 @@ class _FindRideScreenState extends State<FindRideScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: const Color(0xFFEAF2F4),
       body: SafeArea(
