@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 
 Future addUserDetails(String fullname, String username, String email,
@@ -22,4 +23,11 @@ Future addUserDetails(String fullname, String username, String email,
 int calculateYears(DateTime birthday) {
   return int.parse(DateFormat('yyyy').format(DateTime.now())) -
       int.parse(DateFormat('yyyy').format(birthday));
+}
+
+DocumentReference getLoggedUserReference() {
+  final userReference = FirebaseFirestore.instance
+      .collection('users')
+      .doc(FirebaseAuth.instance.currentUser?.uid);
+  return userReference;
 }

@@ -1,3 +1,4 @@
+import 'package:bikerzone/models/ride.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -40,5 +41,25 @@ Future<String> addRide(
     // ignore: avoid_print
     print('Error: $error');
     rethrow;
+  }
+}
+
+Future<bool> addRiderToThisRide(DocumentReference userRef, Ride ride) async {
+  final ridersSnapshot = await FirebaseFirestore.instance
+      .collection('rides')
+      .doc(ride.id)
+      .collection('riders')
+      .where('user_id', isEqualTo: userRef)
+      .get();
+
+  if (ridersSnapshot.docs.isEmpty) {
+    FirebaseFirestore.instance
+        .collection('rides')
+        .doc(ride.id)
+        .collection('riders')
+        .add({'user_id': userRef});
+    return true;
+  } else {
+    return false;
   }
 }

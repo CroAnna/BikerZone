@@ -1,5 +1,6 @@
 import 'package:bikerzone/models/ride.dart';
 import 'package:bikerzone/models/user.dart';
+import 'package:bikerzone/services/ride_service.dart';
 import 'package:bikerzone/services/user_service.dart';
 import 'package:bikerzone/widgets/large_button_custom.dart';
 import 'package:bikerzone/widgets/stop_points_custom.dart';
@@ -7,6 +8,7 @@ import 'package:bikerzone/widgets/top_navigation_custom.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 // ignore: must_be_immutable
 class RideDetailsScreen extends StatefulWidget {
@@ -59,8 +61,25 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                   screenWidth: screenWidth, streamRiders: _streamRiders),
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 20),
-                child: const LargeButtonCustom(
-                    onTap: null, btnText: "Pridruži se ovoj vožnji"),
+                child: LargeButtonCustom(
+                    onTap: () async {
+                      final res = await addRiderToThisRide(
+                          getLoggedUserReference(), widget.ride);
+                      print(res.toString());
+
+                      Fluttertoast.showToast(
+                        msg: res == true
+                            ? "Uspješno ste se pridružili!"
+                            : "Već ste se pridružili ovoj vožnji!",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        backgroundColor: res == true
+                            ? const Color(0xFF528C9E)
+                            : const Color(0xFFA41723),
+                        textColor: Colors.white,
+                      );
+                    },
+                    btnText: "Pridruži se ovoj vožnji"),
               )
             ],
           ),
