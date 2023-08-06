@@ -24,10 +24,20 @@ class _AddRideScreenState extends State<AddRideScreen> {
   final nmbrOfPeopleController = TextEditingController();
   final organizersMessageController = TextEditingController();
   // TODO add stop points
-  String? ride_id;
+  String? rideId;
+  String? highway;
+
   void _handleDataReceived(DateTime date) {
     setState(() {
       startingDaTController = date;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      highway = 'ne';
     });
   }
 
@@ -85,6 +95,52 @@ class _AddRideScreenState extends State<AddRideScreen> {
             // TODO dropdown input - Preporučeni tip motora u grupi:
             // TODO dropdown input - Tempo putovanja:
 
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
+              child: Container(
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.only(left: 5, bottom: 2),
+                child: const Text(
+                  "Putujemo autocestom?",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Color(0xFF4E4E4E),
+                  ),
+                ),
+              ),
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 150,
+                  child: RadioListTile(
+                    title: const Text("Ne"),
+                    value: "ne",
+                    groupValue: highway,
+                    onChanged: (value) {
+                      setState(() {
+                        highway = value.toString();
+                      });
+                    },
+                  ),
+                ),
+                SizedBox(
+                  width: 150,
+                  child: RadioListTile(
+                    title: const Text("Da"),
+                    value: "da",
+                    groupValue: highway,
+                    onChanged: (value) {
+                      setState(() {
+                        highway = value.toString();
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
             InputFieldCustom(
               controller: nmbrOfPeopleController,
               hintText: "npr. 10 ili ostavi prazno",
@@ -95,7 +151,7 @@ class _AddRideScreenState extends State<AddRideScreen> {
             InputFieldCustom(
               isTextarea: true,
               controller: organizersMessageController,
-              hintText: "npr.",
+              hintText: "npr. što očekivati od vožnje",
               labelText: "Poruka organizatora: (opcionalno):",
             ),
             LargeButtonCustom(
@@ -106,16 +162,19 @@ class _AddRideScreenState extends State<AddRideScreen> {
                     finishingCityController.text,
                     startingDaTController!,
                     double.parse(expectedTravelTimeController.text),
-                    false, // TODO fix highwayController
+                    highway == "da" ? true : false,
                     bikeTypeController.text,
                     paceController.text,
-                    int.parse(nmbrOfPeopleController.text),
+                    nmbrOfPeopleController.text.isEmpty
+                        ? 0
+                        : int.parse(nmbrOfPeopleController.text),
                     organizersMessageController.text,
                     ["Stop1", "Stop2"],
                   );
                   setState(() {
-                    ride_id = id; // Store the event ID in the event_id field
+                    rideId = id;
                   });
+                  // ignore: use_build_context_synchronously
                   Navigator.pop(context);
                 },
                 btnText: "Objavi grupnu vožnju")
