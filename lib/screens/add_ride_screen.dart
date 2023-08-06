@@ -17,7 +17,7 @@ class _AddRideScreenState extends State<AddRideScreen> {
   final exactStartingPointController = TextEditingController();
   final finishingCityController = TextEditingController();
   DateTime? startingDaTController;
-  final expectedTravelTimeController = TextEditingController();
+  DateTime? finishingDaTController;
   final highwayController = TextEditingController();
   final bikeTypeController = TextEditingController();
   final paceController = TextEditingController();
@@ -27,9 +27,15 @@ class _AddRideScreenState extends State<AddRideScreen> {
   String? rideId;
   String? highway;
 
-  void _handleDataReceived(DateTime date) {
+  void _handleStartDataReceived(DateTime date) {
     setState(() {
       startingDaTController = date;
+    });
+  }
+
+  void _handleFinishDataReceived(DateTime date) {
+    setState(() {
+      finishingDaTController = date;
     });
   }
 
@@ -77,7 +83,7 @@ class _AddRideScreenState extends State<AddRideScreen> {
             ),
 
             InputDateCustom(
-              onDataReceived: _handleDataReceived,
+              onDataReceived: _handleStartDataReceived,
               hintText: "Odaberi...",
               setHours: true,
               futureDateAllowed: true,
@@ -85,13 +91,15 @@ class _AddRideScreenState extends State<AddRideScreen> {
               labelText: "Datum i vrijeme polaska:",
             ),
 
-            InputFieldCustom(
-              controller: expectedTravelTimeController,
-              hintText: "npr. 3",
-              hide: false,
-              labelText: "Očekivano trajanje putovanja (sati):",
+            InputDateCustom(
+              onDataReceived: _handleFinishDataReceived,
+              hintText: "Odaberi...",
+              setHours: true,
+              futureDateAllowed: true,
+              helpText: "Očekivano vrijeme dolaska:",
+              labelText: "Očekivano vrijeme dolaska:",
             ),
-            // TODO radio button - Putujemo autocestom?
+
             // TODO dropdown input - Preporučeni tip motora u grupi:
             // TODO dropdown input - Tempo putovanja:
 
@@ -161,10 +169,10 @@ class _AddRideScreenState extends State<AddRideScreen> {
                     exactStartingPointController.text,
                     finishingCityController.text,
                     startingDaTController!,
-                    double.parse(expectedTravelTimeController.text),
+                    finishingDaTController!,
                     highway == "da" ? true : false,
                     bikeTypeController.text,
-                    paceController.text,
+                    " paceController.text",
                     nmbrOfPeopleController.text.isEmpty
                         ? 0
                         : int.parse(nmbrOfPeopleController.text),

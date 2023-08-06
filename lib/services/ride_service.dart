@@ -6,7 +6,7 @@ Future<String> addRide(
   String exactStartingPoint,
   String finishingCity,
   DateTime? startingDaT,
-  double expectedTravelTime,
+  DateTime? finishingDaT,
   bool highway,
   String bikeType,
   String pace,
@@ -21,16 +21,16 @@ Future<String> addRide(
         FirebaseFirestore.instance.collection('rides').doc();
 
     await rideRef.set({
-      'id': rideRef.id, // store the ID of the event
+      'id': rideRef.id,
       'accept_type': bikeType,
       'exact_starting_point': exactStartingPoint,
       'finishing_point': finishingCity,
       'starting_point': startingCity,
-      'finish_d_a_t': startingDaT, // TODO FIX
+      'finish_d_a_t': finishingDaT,
       'max_number_of_people': nmbrOfPeople,
       'highway': highway,
       'message': organizersMessage,
-      'pace': pace,
+      'pace': "pace",
       'start_d_a_t': startingDaT,
       'stop_points': stopPoints,
       'user_id': userId,
