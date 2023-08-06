@@ -4,14 +4,16 @@ class InputFieldCustom extends StatelessWidget {
   final TextEditingController controller;
   final String? hintText;
   final String labelText;
-  final bool hide;
+  bool hide;
+  bool isTextarea;
 
-  const InputFieldCustom({
+  InputFieldCustom({
     super.key,
     required this.controller,
     required this.hintText,
     this.labelText = "",
-    required this.hide,
+    this.hide = false,
+    this.isTextarea = false,
   });
 
   @override
@@ -38,6 +40,8 @@ class InputFieldCustom extends StatelessWidget {
             TextField(
               controller: controller,
               obscureText: hide,
+              keyboardType: isTextarea ? TextInputType.multiline : null,
+              maxLines: isTextarea ? 15 : 1,
               decoration: InputDecoration(
                 enabledBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Color(0xFF0276B4), width: 1),

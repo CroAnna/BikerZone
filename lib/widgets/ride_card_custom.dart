@@ -155,7 +155,9 @@ class _RideCardCustomState extends State<RideCardCustom> {
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            widget.ride.acceptType,
+                            widget.ride.acceptType == "-"
+                                ? "Svi motori"
+                                : widget.ride.acceptType,
                             style: const TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 16,
@@ -198,8 +200,7 @@ class _RideCardCustomState extends State<RideCardCustom> {
                           children: [
                             CircleAvatar(
                               radius: screenWidth / 20,
-                              backgroundImage: widget.user.imageUrl !=
-                                      null // TODO fix if user has no image
+                              backgroundImage: widget.user.imageUrl.isNotEmpty
                                   ? NetworkImage(widget.user.imageUrl)
                                       as ImageProvider<Object>
                                   : const AssetImage('lib/images/no_image.jpg'),

@@ -56,7 +56,7 @@ class _SemicircleProfileCustomState extends State<SemicircleProfileCustom> {
       stream: _imageStream,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          final imageUrl = snapshot.data!.get('image_url') as String?;
+          final imageUrl = snapshot.data!.get('image_url') as String;
           return Column(
             children: [
               Stack(
@@ -86,7 +86,7 @@ class _SemicircleProfileCustomState extends State<SemicircleProfileCustom> {
                         children: [
                           CircleAvatar(
                             radius: screenWidth / 6,
-                            backgroundImage: imageUrl != null
+                            backgroundImage: imageUrl.isNotEmpty
                                 ? NetworkImage(imageUrl)
                                     as ImageProvider<Object>
                                 : const AssetImage('lib/images/no_image.jpg'),
