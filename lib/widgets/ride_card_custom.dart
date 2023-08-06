@@ -155,7 +155,9 @@ class _RideCardCustomState extends State<RideCardCustom> {
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            widget.ride.acceptType,
+                            widget.ride.acceptType == "-"
+                                ? "Svi motori"
+                                : widget.ride.acceptType,
                             style: const TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 16,

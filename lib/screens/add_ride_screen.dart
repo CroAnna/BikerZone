@@ -121,7 +121,7 @@ class _AddRideScreenState extends State<AddRideScreen> {
                 "Enduro",
                 "Mopedi",
                 "Sportski",
-                "Četverokotači"
+                "Quadovi"
               ],
               dropdownValue: dropdownBikeValue,
               onChanged: (String? newValue) {
