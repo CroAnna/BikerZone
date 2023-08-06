@@ -8,12 +8,11 @@ import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 List<Widget> _widgetOptions = <Widget>[
   const HomeScreen(),
   const FindRideScreen(),
-  const WhatsHotScreen(),
+  WhatsHotScreen(),
   const ProfileScreen(),
 ];
 
-Scaffold bottomNavigationCustom(
-    BuildContext context, int selectedIndex, Function(int) onItemTapped) {
+Scaffold bottomNavigationCustom(BuildContext context, int selectedIndex, Function(int) onItemTapped) {
   return Scaffold(
     backgroundColor: const Color(0xFFEAF2F4),
     body: Center(
