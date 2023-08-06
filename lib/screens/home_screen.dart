@@ -1,3 +1,5 @@
+import 'package:bikerzone/screens/add_ride_screen.dart';
+import 'package:bikerzone/widgets/unanimated_route.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -42,7 +44,14 @@ class HomeScreen extends StatelessWidget {
                             child: Column(
                               children: [
                                 GestureDetector(
-                                  onTap: () => {},
+                                  onTap: () => {
+                                    Navigator.push(
+                                      context,
+                                      UnanimatedRoute(
+                                          builder: (context) =>
+                                              AddRideScreen()),
+                                    )
+                                  },
                                   child: Container(
                                     padding: const EdgeInsets.only(
                                         bottom: 10, top: 5),

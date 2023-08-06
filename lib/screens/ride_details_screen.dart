@@ -41,7 +41,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const TopNavigationCustom(
+              TopNavigationCustom(
                   leftIcon: Icons.arrow_back,
                   mainText: "Detalji",
                   rightIcon: null),
