@@ -1,18 +1,24 @@
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class InputDateCustom extends StatefulWidget {
   final void Function(DateTime) onDataReceived;
   final String? hintText;
+  final String? helpText;
   final String labelText;
   final bool futureDateAllowed;
+  bool setHours;
   final DateTime? recievedDate;
-  const InputDateCustom({
+
+  InputDateCustom({
     super.key,
     required this.onDataReceived,
     required this.hintText,
+    required this.helpText,
     this.labelText = "",
     this.recievedDate,
+    this.setHours = false,
     required this.futureDateAllowed,
   });
 
@@ -32,18 +38,16 @@ class _InputDateCustomState extends State<InputDateCustom> {
   }
 
   void openCalendar() async {
+    DateTime now = DateTime.now();
+
     DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: widget.recievedDate == null
-          ? DateTime.now()
-          : widget
-              .recievedDate!, // registration/creating new event or changing recieved date (birthday/event date)
-      firstDate: widget.futureDateAllowed ? DateTime.now() : DateTime(1920),
-      lastDate: widget.futureDateAllowed ? DateTime(2500) : DateTime.now(),
-      helpText: "Odaberi datum rođenja:",
+      initialDate: widget.recievedDate ?? now,
+      firstDate: widget.futureDateAllowed ? now : DateTime(1920),
+      lastDate: widget.futureDateAllowed ? DateTime(2500) : now,
+      helpText: widget.helpText,
       confirmText: "U REDU",
       cancelText: "ODUSTANI",
-
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
@@ -64,9 +68,31 @@ class _InputDateCustomState extends State<InputDateCustom> {
     );
 
     if (pickedDate != null) {
-      String formattedDate = DateFormat('d.M.yyyy.').format(pickedDate);
-      controller.text = formattedDate;
-      widget.onDataReceived(pickedDate);
+      if (widget.setHours) {
+        // ignore: use_build_context_synchronously
+        TimeOfDay? pickedTime = await showTimePicker(
+          context: context,
+          initialTime: TimeOfDay.now(),
+        );
+
+        if (pickedTime != null) {
+          DateTime selectedDateTime = DateTime(
+            pickedDate.year,
+            pickedDate.month,
+            pickedDate.day,
+            pickedTime.hour,
+            pickedTime.minute,
+          );
+
+          controller.text =
+              DateFormat('d.M.yyyy. HH:mm').format(selectedDateTime);
+          widget.onDataReceived(selectedDateTime);
+        }
+      } else {
+        String formattedDate = DateFormat('d.M.yyyy.').format(pickedDate);
+        controller.text = formattedDate;
+        widget.onDataReceived(pickedDate);
+      }
     }
   }
 

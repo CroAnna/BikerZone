@@ -139,6 +139,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       hide: false,
                     ),
                     InputDateCustom(
+                      helpText: "Odaberi datum rođenja:",
                       labelText: "Datum rođenja:",
                       onDataReceived: _handleDataReceived,
                       hintText: "Datum rođenja",

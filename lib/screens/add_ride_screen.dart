@@ -69,7 +69,9 @@ class _AddRideScreenState extends State<AddRideScreen> {
             InputDateCustom(
               onDataReceived: _handleDataReceived,
               hintText: "Odaberi...",
+              setHours: true,
               futureDateAllowed: true,
+              helpText: "Datum i vrijeme polaska:",
               labelText: "Datum i vrijeme polaska:",
             ),
 
