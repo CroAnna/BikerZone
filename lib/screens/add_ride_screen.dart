@@ -1,4 +1,5 @@
 import 'package:bikerzone/services/ride_service.dart';
+import 'package:bikerzone/widgets/dropdown_custom.dart';
 import 'package:bikerzone/widgets/input_date_custom.dart';
 import 'package:bikerzone/widgets/input_field_custom.dart';
 import 'package:bikerzone/widgets/large_button_custom.dart';
@@ -27,6 +28,9 @@ class _AddRideScreenState extends State<AddRideScreen> {
   String? rideId;
   String? highway;
 
+  String dropdownPaceValue = "Polagana vožnja";
+  String dropdownBikeValue = "-";
+
   void _handleStartDataReceived(DateTime date) {
     setState(() {
       startingDaTController = date;
@@ -43,7 +47,7 @@ class _AddRideScreenState extends State<AddRideScreen> {
   void initState() {
     super.initState();
     setState(() {
-      highway = 'ne';
+      highway = "ne";
     });
   }
 
@@ -55,33 +59,30 @@ class _AddRideScreenState extends State<AddRideScreen> {
         child: Column(
           children: [
             TopNavigationCustom(
-                leftIcon: Icons.arrow_back,
-                mainText: "Dodaj novu grupnu vožnju",
-                rightIcon: null,
-                isSmall: true,
-                isLight: true),
-
+              leftIcon: Icons.arrow_back,
+              mainText: "Dodaj novu grupnu vožnju",
+              rightIcon: null,
+              isSmall: true,
+              isLight: true,
+            ),
             InputFieldCustom(
               controller: startingCityController,
               hintText: "npr. Karlovac",
               hide: false,
               labelText: "Grad polazišta:",
             ),
-
             InputFieldCustom(
               controller: exactStartingPointController,
               hintText: "npr. Ulica Neka 23, pekara Kruh",
               hide: false,
               labelText: "Točna adresa polazišta:",
             ),
-
             InputFieldCustom(
               controller: finishingCityController,
               hintText: "npr. Osijek",
               hide: false,
               labelText: "Odredište:",
             ),
-
             InputDateCustom(
               onDataReceived: _handleStartDataReceived,
               hintText: "Odaberi...",
@@ -90,7 +91,6 @@ class _AddRideScreenState extends State<AddRideScreen> {
               helpText: "Datum i vrijeme polaska:",
               labelText: "Datum i vrijeme polaska:",
             ),
-
             InputDateCustom(
               onDataReceived: _handleFinishDataReceived,
               hintText: "Odaberi...",
@@ -99,10 +99,37 @@ class _AddRideScreenState extends State<AddRideScreen> {
               helpText: "Očekivano vrijeme dolaska:",
               labelText: "Očekivano vrijeme dolaska:",
             ),
-
-            // TODO dropdown input - Preporučeni tip motora u grupi:
-            // TODO dropdown input - Tempo putovanja:
-
+            DropdownCustom(
+              labelText: "Tempo putovanja:",
+              dropdownList: const [
+                "Polagana vožnja",
+                'Normalan tempo',
+                'Brza vožnja'
+              ],
+              dropdownValue: dropdownPaceValue,
+              onChanged: (String? newValue) {
+                setState(() {
+                  dropdownPaceValue = newValue!;
+                });
+              },
+            ),
+            DropdownCustom(
+              labelText: "Preporučeni tip motora u grupi:",
+              dropdownList: const [
+                "-",
+                "Cestovni",
+                "Enduro",
+                "Mopedi",
+                "Sportski",
+                "Četverokotači"
+              ],
+              dropdownValue: dropdownBikeValue,
+              onChanged: (String? newValue) {
+                setState(() {
+                  dropdownBikeValue = newValue!;
+                });
+              },
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
               child: Container(
@@ -117,7 +144,6 @@ class _AddRideScreenState extends State<AddRideScreen> {
                 ),
               ),
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -155,7 +181,6 @@ class _AddRideScreenState extends State<AddRideScreen> {
               hide: false,
               labelText: "Maksimalan broj ljudi (opcionalno):",
             ),
-
             InputFieldCustom(
               isTextarea: true,
               controller: organizersMessageController,
@@ -171,8 +196,8 @@ class _AddRideScreenState extends State<AddRideScreen> {
                     startingDaTController!,
                     finishingDaTController!,
                     highway == "da" ? true : false,
-                    bikeTypeController.text,
-                    " paceController.text",
+                    dropdownBikeValue,
+                    dropdownPaceValue,
                     nmbrOfPeopleController.text.isEmpty
                         ? 0
                         : int.parse(nmbrOfPeopleController.text),

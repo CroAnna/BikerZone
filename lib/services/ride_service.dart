@@ -30,7 +30,7 @@ Future<String> addRide(
       'max_number_of_people': nmbrOfPeople,
       'highway': highway,
       'message': organizersMessage,
-      'pace': "pace",
+      'pace': pace,
       'start_d_a_t': startingDaT,
       'stop_points': stopPoints,
       'user_id': userId,
