@@ -1,5 +1,5 @@
 import 'package:bikerzone/screens/add_ride_screen.dart';
-import 'package:bikerzone/widgets/unanimated_route.dart';
+import 'package:bikerzone/screens/my_rides_screen.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -10,9 +10,9 @@ class HomeScreen extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final List<Map<String, dynamic>> itemsList;
     itemsList = [
-      {"imgName": "motorbike", "text": "Nova grupna vožnja"},
-      {"imgName": "camera", "text": "Današnja slika"},
-      {"imgName": "rider", "text": "Prijatelji"},
+      {"imgName": "motorbike", "text": "Nova grupna vožnja", "page": const AddRideScreen()},
+      {"imgName": "camera", "text": "Današnja slika", "page": const AddRideScreen()},
+      {"imgName": "rider", "text": "Moje vožnje", "page": MyRidesScreen()},
     ];
 
     return Scaffold(
@@ -25,10 +25,7 @@ class HomeScreen extends StatelessWidget {
                 padding: EdgeInsets.only(top: 25, bottom: 15),
                 child: Text(
                   'Dobrodošli natrag!',
-                  style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xFF3F3F3F)),
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w400, color: Color(0xFF3F3F3F)),
                 ),
               ),
               Flexible(
@@ -47,14 +44,11 @@ class HomeScreen extends StatelessWidget {
                                   onTap: () => {
                                     Navigator.push(
                                       context,
-                                      UnanimatedRoute(
-                                          builder: (context) =>
-                                              AddRideScreen()),
+                                      MaterialPageRoute(builder: (context) => itemsList[index]["page"]),
                                     )
                                   },
                                   child: Container(
-                                    padding: const EdgeInsets.only(
-                                        bottom: 10, top: 5),
+                                    padding: const EdgeInsets.only(bottom: 10, top: 5),
                                     width: screenWidth * 0.85,
                                     decoration: const BoxDecoration(
                                       color: Color(0xFF528C9E),
@@ -66,12 +60,10 @@ class HomeScreen extends StatelessWidget {
                                       children: [
                                         SizedBox(
                                           height: 120,
-                                          child: Image.asset(
-                                              'lib/images/${itemsList[index]["imgName"]}.png'),
+                                          child: Image.asset('lib/images/${itemsList[index]["imgName"]}.png'),
                                         ),
                                         Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 5),
+                                          padding: const EdgeInsets.only(top: 5),
                                           child: Text(itemsList[index]["text"],
                                               softWrap: true,
                                               style: TextStyle(
@@ -79,8 +71,7 @@ class HomeScreen extends StatelessWidget {
                                                 color: const Color(0xFFEFEFEF),
                                                 shadows: [
                                                   Shadow(
-                                                    color: Colors.black
-                                                        .withOpacity(0.25),
+                                                    color: Colors.black.withOpacity(0.25),
                                                     blurRadius: 4,
                                                     offset: const Offset(0, 4),
                                                   ),
