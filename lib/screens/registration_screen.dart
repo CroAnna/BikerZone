@@ -1,7 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:bikerzone/screens/bike_info_screen.dart';
 import 'package:bikerzone/widgets/input_date_custom.dart';
 import 'package:bikerzone/widgets/input_field_custom.dart';
 import 'package:bikerzone/widgets/large_button_custom.dart';
 import 'package:bikerzone/services/user_service.dart';
+import 'package:bikerzone/widgets/unanimated_route.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -45,20 +49,18 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         return;
       } else {
         // create user (users collection and firebase auth)
-        UserCredential userCredential =
-            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text,
           password: passwordController.text,
         );
         addUserDetails(
-            fullnameController.text,
-            usernameController.text,
-            emailController.text,
-            birthdayController!,
-            userCredential.user!.uid);
+            fullnameController.text, usernameController.text, emailController.text, birthdayController!, userCredential.user!.uid);
 
-        // ignore: use_build_context_synchronously
         Navigator.pop(context);
+        Navigator.push(
+          context,
+          UnanimatedRoute(builder: (context) => BikeInfoScreen()),
+        );
       }
     } on FirebaseAuthException catch (error) {
       Navigator.pop(context);
@@ -187,17 +189,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       children: [
                         const Text(
                           "Već imate račun? ",
-                          style:
-                              TextStyle(color: Color(0xFF444444), fontSize: 14),
+                          style: TextStyle(color: Color(0xFF444444), fontSize: 14),
                         ),
                         GestureDetector(
                           onTap: widget.onTap,
                           child: const Text(
                             "Prijavite se.",
-                            style: TextStyle(
-                                color: Color(0xFFA41723),
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14),
+                            style: TextStyle(color: Color(0xFFA41723), fontWeight: FontWeight.bold, fontSize: 14),
                           ),
                         )
                       ],

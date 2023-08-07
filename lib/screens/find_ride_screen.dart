@@ -14,8 +14,7 @@ class FindRideScreen extends StatefulWidget {
 
 class _FindRideScreenState extends State<FindRideScreen> {
   bool isFilterShown = false;
-  final CollectionReference _referenceRides =
-      FirebaseFirestore.instance.collection('rides');
+  final CollectionReference _referenceRides = FirebaseFirestore.instance.collection('rides');
   late Stream<QuerySnapshot> _streamRides;
 
   @override
@@ -35,69 +34,62 @@ class _FindRideScreenState extends State<FindRideScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFEAF2F4),
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Center(
-            child: Column(
-              children: [
-                OfferOverviewCustom(
-                    isFilterShown: isFilterShown,
-                    onDataRecieved: _handleDataRecieved),
-                Visibility(
-                  visible: isFilterShown,
-                  child: const FilterDropdownCustom(),
-                ),
-                SizedBox(
-                  height: 500, // TODO fix
-                  child: StreamBuilder(
-                    stream: _streamRides,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return Center(child: Text('Error: ${snapshot.error}'));
-                      }
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            OfferOverviewCustom(isFilterShown: isFilterShown, onDataRecieved: _handleDataRecieved),
+            Visibility(
+              visible: isFilterShown,
+              child: const FilterDropdownCustom(),
+            ),
+            Expanded(
+              child: StreamBuilder(
+                stream: _streamRides,
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
 
-                      if (!snapshot.hasData) {
-                        return Text('Loading...');
-                      }
+                  if (!snapshot.hasData) {
+                    return const Text('Loading...');
+                  }
 
-                      final rides = snapshot.data!.docs.map((doc) {
-                        return Ride.fromDocument(doc);
-                      }).toList();
+                  final rides = snapshot.data!.docs.map((doc) {
+                    return Ride.fromDocument(doc);
+                  }).toList();
 
-                      return ListView.builder(
-                        itemCount: rides.length,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return FutureBuilder(
-                            future: getDocumentByIdEveryType(
-                              "users",
-                              rides[index].userId,
-                              (snapshot) => UserC.fromDocument(snapshot),
-                            ),
-                            builder: (context, snapshot) {
-                              if (!snapshot.hasData) {
-                                return const SizedBox(
-                                  width: 0,
-                                );
-                              }
-                              if (snapshot.hasData) {
-                                final data = snapshot.data!;
-                                return RideCardCustom(
-                                    ride: rides[index], user: data);
-                              } else {
-                                return const SizedBox(
-                                  width: 0,
-                                );
-                              }
-                            },
-                          );
+                  return ListView.builder(
+                    itemCount: rides.length,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      return FutureBuilder(
+                        future: getDocumentByIdEveryType(
+                          "users",
+                          rides[index].userId,
+                          (snapshot) => UserC.fromDocument(snapshot),
+                        ),
+                        builder: (context, snapshot) {
+                          if (!snapshot.hasData) {
+                            return const SizedBox(
+                              width: 0,
+                            );
+                          }
+                          if (snapshot.hasData) {
+                            final data = snapshot.data!;
+                            return RideCardCustom(ride: rides[index], user: data);
+                          } else {
+                            return const SizedBox(
+                              width: 0,
+                            );
+                          }
                         },
                       );
                     },
-                  ),
-                ),
-              ],
+                  );
+                },
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );
@@ -106,8 +98,7 @@ class _FindRideScreenState extends State<FindRideScreen> {
 
 // ignore: must_be_immutable
 class OfferOverviewCustom extends StatefulWidget {
-  OfferOverviewCustom(
-      {super.key, required this.isFilterShown, required this.onDataRecieved});
+  OfferOverviewCustom({super.key, required this.isFilterShown, required this.onDataRecieved});
   bool isFilterShown;
   final void Function(bool) onDataRecieved;
 
