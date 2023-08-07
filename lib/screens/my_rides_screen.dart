@@ -8,7 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class MyRidesScreen extends StatefulWidget {
-  MyRidesScreen({super.key});
+  const MyRidesScreen({super.key});
 
   @override
   State<MyRidesScreen> createState() => _MyRidesScreenState();
@@ -28,16 +28,16 @@ class _MyRidesScreenState extends State<MyRidesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: SingleChildScrollView(
-        child: Column(
-          children: [
-            TopNavigationCustom(
-              leftIcon: Icons.arrow_back,
-              mainText: "Moje vožnje",
-              rightIcon: null,
-              isSmall: true,
-            ),
-            StreamBuilder<QuerySnapshot>(
+          child: Column(
+        children: [
+          TopNavigationCustom(
+            leftIcon: Icons.arrow_back,
+            mainText: "Moje vožnje",
+            rightIcon: null,
+            isSmall: true,
+          ),
+          Expanded(
+            child: StreamBuilder<QuerySnapshot>(
                 stream: _streamRides,
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
@@ -49,57 +49,55 @@ class _MyRidesScreenState extends State<MyRidesScreen> {
 
                   final rides = snapshot.data!.docs;
 
-                  return SizedBox(
-                      height: 600, // TODO FIX
-                      child: rides.isEmpty
-                          ? const Center(
-                              child: Text("Još nemate vožnji :("),
-                            )
-                          : ListView.builder(
-                              itemCount: rides.length,
-                              itemBuilder: (context, index) {
-                                final ride = rides[index];
-                                final rideRef = ride['ride_ref'] as DocumentReference;
+                  return rides.isEmpty
+                      ? const Center(
+                          child: Text("Još nemate vožnji :("),
+                        )
+                      : ListView.builder(
+                          itemCount: rides.length,
+                          itemBuilder: (context, index) {
+                            final ride = rides[index];
+                            final rideRef = ride['ride_ref'] as DocumentReference;
 
-                                return FutureBuilder(
-                                    future: rideRef.get(),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState == ConnectionState.waiting) {
-                                        return const CircularProgressIndicator();
-                                      }
-                                      if (snapshot.hasData && snapshot.data!.exists) {
-                                        final rideObject = Ride.fromDocument(snapshot.data!);
-                                        return FutureBuilder(
-                                          future: getDocumentByIdEveryType(
-                                            "users",
-                                            rideObject.userId,
-                                            (snapshot) => UserC.fromDocument(snapshot),
-                                          ),
-                                          builder: (context, snapshot) {
-                                            if (!snapshot.hasData) {
-                                              return const SizedBox(
-                                                width: 0,
-                                              );
-                                            }
-                                            if (snapshot.hasData) {
-                                              final data = snapshot.data!;
-                                              return RideCardCustom(ride: rideObject, user: data);
-                                            } else {
-                                              return const SizedBox(
-                                                width: 0,
-                                              );
-                                            }
-                                          },
-                                        );
-                                      } else {
-                                        return const Text("Ride not found error");
-                                      }
-                                    });
-                              },
-                            ));
-                })
-          ],
-        ),
+                            return FutureBuilder(
+                                future: rideRef.get(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState == ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  }
+                                  if (snapshot.hasData && snapshot.data!.exists) {
+                                    final rideObject = Ride.fromDocument(snapshot.data!);
+                                    return FutureBuilder(
+                                      future: getDocumentByIdEveryType(
+                                        "users",
+                                        rideObject.userId,
+                                        (snapshot) => UserC.fromDocument(snapshot),
+                                      ),
+                                      builder: (context, snapshot) {
+                                        if (!snapshot.hasData) {
+                                          return const SizedBox(
+                                            width: 0,
+                                          );
+                                        }
+                                        if (snapshot.hasData) {
+                                          final data = snapshot.data!;
+                                          return RideCardCustom(ride: rideObject, user: data);
+                                        } else {
+                                          return const SizedBox(
+                                            width: 0,
+                                          );
+                                        }
+                                      },
+                                    );
+                                  } else {
+                                    return const Text("Ride not found error");
+                                  }
+                                });
+                          },
+                        );
+                }),
+          )
+        ],
       )),
     );
   }
