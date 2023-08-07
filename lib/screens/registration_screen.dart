@@ -56,7 +56,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         addUserDetails(
             fullnameController.text, usernameController.text, emailController.text, birthdayController!, userCredential.user!.uid);
 
-        //Navigator.pop(context);
+        Navigator.pop(context);
         Navigator.push(
           context,
           UnanimatedRoute(builder: (context) => BikeInfoScreen()),

@@ -17,8 +17,7 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   Stream<DocumentSnapshot>? _userStream;
-  final CollectionReference _referenceUsers =
-      FirebaseFirestore.instance.collection("users");
+  final CollectionReference _referenceUsers = FirebaseFirestore.instance.collection("users");
 
   void signOut() {
     FirebaseAuth.instance.signOut();
@@ -27,8 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    _userStream =
-        _referenceUsers.doc(FirebaseAuth.instance.currentUser?.uid).snapshots();
+    _userStream = _referenceUsers.doc(FirebaseAuth.instance.currentUser?.uid).snapshots();
   }
 
   @override
@@ -57,43 +55,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     return SingleChildScrollView(
                       child: Column(
                         children: [
-                          TopNavigationCustom(
-                              leftIcon: null,
-                              mainText: user.username,
-                              rightIcon: Icons.settings),
+                          TopNavigationCustom(leftIcon: null, mainText: user.username, rightIcon: Icons.settings),
                           SemicircleProfileCustom(
-                            loggedUserId:
-                                FirebaseAuth.instance.currentUser?.uid,
+                            loggedUserId: FirebaseAuth.instance.currentUser?.uid,
                             isEdit: true,
                           ),
                           const SizedBox(
                             height: 20,
                           ),
-                          UserDataCustom(
-                              textTitle: "Osnovno o meni",
-                              itemsList: [
-                                {"icon": Icons.person, "text": data},
-                                {
-                                  "icon": Icons.person_pin_circle,
-                                  "text": user.fullname
-                                },
-                                const {
-                                  "icon": Icons.two_wheeler,
-                                  "text": "TODO Yamaha MT-07"
-                                },
-                                {
-                                  "icon": Icons.description,
-                                  "text": user.description.isNotEmpty
-                                      ? user.description
-                                      : "-"
-                                },
-                              ]),
+                          UserDataCustom(textTitle: "Osnovno o meni", itemsList: [
+                            {"icon": Icons.person, "text": data},
+                            {"icon": Icons.person_pin_circle, "text": user.fullname},
+                            {
+                              "icon": Icons.two_wheeler,
+                              "text": "${user.bike.manufacturer} ${user.bike.model}",
+                            },
+                            {"icon": Icons.description, "text": user.description.isNotEmpty ? user.description : "-"},
+                          ]),
                           GestureDetector(
                             onTap: () => {
                               Navigator.push(
                                 context,
-                                UnanimatedRoute(
-                                    builder: (context) => FriendListScreen()),
+                                UnanimatedRoute(builder: (context) => FriendListScreen()),
                               )
                             },
                             child: Container(
@@ -106,16 +89,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     child: Container(
                                         height: 70,
                                         decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
+                                          borderRadius: BorderRadius.circular(15),
                                           color: const Color(0xFFF9B0B0),
                                         ),
                                         width: screenWidth * 0.30,
                                         child: Align(
                                           alignment: Alignment.centerRight,
                                           child: Container(
-                                            margin: const EdgeInsets.only(
-                                                right: 28),
+                                            margin: const EdgeInsets.only(right: 28),
                                             child: const Icon(
                                               Icons.edit,
                                               color: Color(0xFF444444),
@@ -135,10 +116,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       child: Text(
                                         "Moji prijatelji",
                                         textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            color: Color(0xFFFFF3E5),
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 24),
+                                        style: TextStyle(color: Color(0xFFFFF3E5), fontWeight: FontWeight.w500, fontSize: 24),
                                       ),
                                     ),
                                   ),
@@ -165,8 +143,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ],
                               ),
                               child: const Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
                                   Icon(
                                     Icons.logout,

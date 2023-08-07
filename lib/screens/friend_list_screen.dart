@@ -112,7 +112,7 @@ class _FriendListScreenState extends State<FriendListScreen> {
                                                               color: Color(0xFF0276B4),
                                                             ),
                                                             const SizedBox(width: 5),
-                                                            Text(userObject.bike),
+                                                            Text(userObject.bike.model),
                                                           ],
                                                         )
                                                       ],

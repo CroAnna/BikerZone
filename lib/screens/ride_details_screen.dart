@@ -26,11 +26,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    _streamRiders = FirebaseFirestore.instance
-        .collection('rides')
-        .doc(widget.ride.id)
-        .collection('riders')
-        .snapshots();
+    _streamRiders = FirebaseFirestore.instance.collection('rides').doc(widget.ride.id).collection('riders').snapshots();
   }
 
   @override
@@ -43,39 +39,24 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              TopNavigationCustom(
-                  leftIcon: Icons.arrow_back,
-                  mainText: "Detalji",
-                  rightIcon: null),
-              DetailsCard1(
-                  screenWidth: screenWidth,
-                  ride: widget.ride,
-                  user: widget.user),
-              DetailsCard2(
-                  screenWidth: screenWidth,
-                  ride: widget.ride,
-                  user: widget.user),
+              TopNavigationCustom(leftIcon: Icons.arrow_back, mainText: "Detalji", rightIcon: null),
+              DetailsCard1(screenWidth: screenWidth, ride: widget.ride, user: widget.user),
+              DetailsCard2(screenWidth: screenWidth, ride: widget.ride, user: widget.user),
               DetailsCard3(screenWidth: screenWidth, ride: widget.ride),
               StopPointsCustom(screenWidth: screenWidth, ride: widget.ride),
-              DetailsCard4(
-                  screenWidth: screenWidth, streamRiders: _streamRiders),
+              DetailsCard4(screenWidth: screenWidth, streamRiders: _streamRiders),
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 20),
                 child: LargeButtonCustom(
                     onTap: () async {
-                      final res = await addRiderToThisRide(
-                          getLoggedUserReference(), widget.ride);
+                      final res = await addRiderToThisRide(getLoggedUserReference(), widget.ride);
                       print(res.toString());
 
                       Fluttertoast.showToast(
-                        msg: res == true
-                            ? "Uspješno ste se pridružili!"
-                            : "Već ste se pridružili ovoj vožnji!",
+                        msg: res == true ? "Uspješno ste se pridružili!" : "Već ste se pridružili ovoj vožnji!",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.BOTTOM,
-                        backgroundColor: res == true
-                            ? const Color(0xFF528C9E)
-                            : const Color(0xFFA41723),
+                        backgroundColor: res == true ? const Color(0xFF528C9E) : const Color(0xFFA41723),
                         textColor: Colors.white,
                       );
                     },
@@ -90,11 +71,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
 }
 
 class DetailsCard1 extends StatelessWidget {
-  const DetailsCard1(
-      {super.key,
-      required this.screenWidth,
-      required this.ride,
-      required this.user});
+  const DetailsCard1({super.key, required this.screenWidth, required this.ride, required this.user});
 
   final double screenWidth;
   final Ride ride;
@@ -139,9 +116,7 @@ class DetailsCard1 extends StatelessWidget {
                 height: 50,
                 decoration: BoxDecoration(
                   color: const Color(0xFFDFDFDF),
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(8),
-                      topRight: Radius.circular(8)),
+                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.black.withOpacity(0.25),
@@ -153,11 +128,7 @@ class DetailsCard1 extends StatelessWidget {
                 child: Center(
                   child: Text(
                     "${ride.startingPoint} - ${ride.finishingPoint}",
-                    style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 0.5,
-                        color: Color(0xFF3F3F3F)),
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, letterSpacing: 0.5, color: Color(0xFF3F3F3F)),
                   ),
                 ),
               ),
@@ -170,17 +141,11 @@ class DetailsCard1 extends StatelessWidget {
                       children: [
                         const Text(
                           "Polazak:",
-                          style: TextStyle(
-                              color: Color(0xFF444444),
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500),
+                          style: TextStyle(color: Color(0xFF444444), fontSize: 18, fontWeight: FontWeight.w500),
                         ),
                         Text(
                           DateFormat('H:mm').format(ride.startDaT),
-                          style: const TextStyle(
-                              color: Color(0xFF444444),
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700),
+                          style: const TextStyle(color: Color(0xFF444444), fontSize: 24, fontWeight: FontWeight.w700),
                         )
                       ],
                     ),
@@ -193,10 +158,7 @@ class DetailsCard1 extends StatelessWidget {
                         const Text("Okvirni\ndolazak:"),
                         Text(
                           DateFormat('H:mm').format(ride.finishDaT),
-                          style: const TextStyle(
-                              color: Color(0xFF444444),
-                              fontSize: 24,
-                              fontWeight: FontWeight.w700),
+                          style: const TextStyle(color: Color(0xFF444444), fontSize: 24, fontWeight: FontWeight.w700),
                         )
                       ],
                     )
@@ -213,31 +175,20 @@ class DetailsCard1 extends StatelessWidget {
                       children: [
                         const Text(
                           "Organizira:",
-                          style: TextStyle(
-                              color: Color(0xFF444444),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400),
+                          style: TextStyle(color: Color(0xFF444444), fontSize: 14, fontWeight: FontWeight.w400),
                         ),
                         Text(
                           user.username,
-                          style: const TextStyle(
-                              color: Color(0xFF444444),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w400),
+                          style: const TextStyle(color: Color(0xFF444444), fontSize: 16, fontWeight: FontWeight.w400),
                         ),
                         Text(
                           "${user.fullname}, ${calculateYears(user.birthday)}",
-                          style: const TextStyle(
-                              color: Color(0xFF444444),
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600),
+                          style: const TextStyle(color: Color(0xFF444444), fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                       ],
                     ),
                     const SizedBox(width: 10),
-                    CircleAvatar(
-                        radius: screenWidth / 15,
-                        backgroundImage: NetworkImage(user.imageUrl)),
+                    CircleAvatar(radius: screenWidth / 15, backgroundImage: NetworkImage(user.imageUrl)),
                     const SizedBox(width: 5),
                   ],
                 ),
@@ -251,11 +202,7 @@ class DetailsCard1 extends StatelessWidget {
 }
 
 class DetailsCard2 extends StatelessWidget {
-  const DetailsCard2(
-      {super.key,
-      required this.screenWidth,
-      required this.ride,
-      required this.user});
+  const DetailsCard2({super.key, required this.screenWidth, required this.ride, required this.user});
 
   final double screenWidth;
   final Ride ride;
@@ -283,9 +230,7 @@ class DetailsCard2 extends StatelessWidget {
             width: screenWidth * 0.57,
             decoration: BoxDecoration(
               color: const Color(0xFFF9B0B0),
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  bottomRight: Radius.circular(16)),
+              borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), bottomRight: Radius.circular(16)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.3),
@@ -343,20 +288,12 @@ class DetailsCard3 extends StatelessWidget {
     final List<Map<String, dynamic>> itemsList;
     itemsList = [
       {"icon": Icons.location_on, "text": ride.exactStartingPoint},
-      {
-        "icon": Icons.add_road,
-        "text": ride.highway ? "Putujemo autocestom" : "Ne putujemo autocestom"
-      },
+      {"icon": Icons.add_road, "text": ride.highway ? "Putujemo autocestom" : "Ne putujemo autocestom"},
       {
         "icon": Icons.two_wheeler,
-        "text": ride.acceptType == "Svi motori"
-            ? "Prihvaćamo sve tipove motora"
-            : "Preferiramo tip ${ride.acceptType}"
+        "text": ride.acceptType == "Svi motori" ? "Prihvaćamo sve tipove motora" : "Preferiramo tip ${ride.acceptType}"
       },
-      {
-        "icon": Icons.people_alt,
-        "text": "Max broj ljudi u grupi: ${ride.maxPeople}"
-      },
+      {"icon": Icons.people_alt, "text": "Max broj ljudi u grupi: ${ride.maxPeople}"},
       {"icon": Icons.speed, "text": ride.pace},
     ];
     return Container(
@@ -384,8 +321,7 @@ class DetailsCard3 extends StatelessWidget {
                 itemCount: itemsList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                     child: Row(
                       children: [
                         Icon(
@@ -398,8 +334,7 @@ class DetailsCard3 extends StatelessWidget {
                           child: Text(
                             itemsList[index]["text"],
                             softWrap: true,
-                            style: const TextStyle(
-                                fontSize: 16, color: Color(0xFF444444)),
+                            style: const TextStyle(fontSize: 16, color: Color(0xFF444444)),
                           ),
                         ),
                       ],
@@ -416,8 +351,7 @@ class DetailsCard3 extends StatelessWidget {
 }
 
 class DetailsCard4 extends StatelessWidget {
-  const DetailsCard4(
-      {super.key, required this.screenWidth, required this.streamRiders});
+  const DetailsCard4({super.key, required this.screenWidth, required this.streamRiders});
   final double screenWidth;
   final dynamic streamRiders;
 
@@ -443,9 +377,7 @@ class DetailsCard4 extends StatelessWidget {
             width: 200,
             decoration: BoxDecoration(
               color: const Color(0xFF444444),
-              borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(16),
-                  bottomRight: Radius.circular(16)),
+              borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), bottomRight: Radius.circular(16)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.3),
@@ -487,31 +419,25 @@ class DetailsCard4 extends StatelessWidget {
                 return SizedBox(
                   height: riders.isEmpty ? 60 : riders.length * 91,
                   child: riders.isEmpty
-                      ? const Center(
-                          child:
-                              Text("Još nema drugih bajkera na ovoj vožnji."))
+                      ? const Center(child: Text("Još nema drugih bajkera na ovoj vožnji."))
                       : ListView.builder(
                           itemCount: riders.length,
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
-                            final riderRef =
-                                riders[index]['user_id'] as DocumentReference;
+                            final riderRef = riders[index]['user_id'] as DocumentReference;
 
                             return FutureBuilder<DocumentSnapshot>(
                               future: riderRef.get(),
                               builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
                                   return const CircularProgressIndicator();
                                 }
 
                                 if (snapshot.hasData && snapshot.data!.exists) {
-                                  final riderObject =
-                                      UserC.fromDocument(snapshot.data!);
+                                  final riderObject = UserC.fromDocument(snapshot.data!);
 
                                   return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 10),
+                                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                                     child: Stack(
                                       children: [
                                         Positioned(
@@ -522,50 +448,35 @@ class DetailsCard4 extends StatelessWidget {
                                             width: screenWidth * 0.7,
                                             decoration: BoxDecoration(
                                                 color: const Color(0xFFEAEAEA),
-                                                border: Border.all(
-                                                    color:
-                                                        const Color(0xFF0276B4),
-                                                    width: 2),
+                                                border: Border.all(color: const Color(0xFF0276B4), width: 2),
                                                 boxShadow: [
                                                   BoxShadow(
-                                                    color:
-                                                        const Color(0xFF0276B4)
-                                                            .withOpacity(0.5),
+                                                    color: const Color(0xFF0276B4).withOpacity(0.5),
                                                     blurRadius: 4,
                                                     offset: const Offset(0, 4),
                                                   )
                                                 ],
-                                                borderRadius:
-                                                    BorderRadius.circular(16)),
+                                                borderRadius: BorderRadius.circular(16)),
                                             child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 35),
+                                              padding: const EdgeInsets.only(left: 35),
                                               child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                                 children: [
                                                   Text(
                                                     riderObject.username,
                                                     style: const TextStyle(
-                                                        fontSize: 18,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color:
-                                                            Color(0xFF444444)),
+                                                        fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFF444444)),
                                                   ),
                                                   Row(
                                                     children: [
                                                       const Icon(
                                                         Icons.two_wheeler,
                                                         size: 24,
-                                                        color:
-                                                            Color(0xFF0276B4),
+                                                        color: Color(0xFF0276B4),
                                                       ),
                                                       const SizedBox(width: 5),
-                                                      Text(riderObject.bike),
+                                                      Text("${riderObject.bike.manufacturer} ${riderObject.bike.model}"),
                                                     ],
                                                   )
                                                 ],
@@ -575,13 +486,9 @@ class DetailsCard4 extends StatelessWidget {
                                         ),
                                         CircleAvatar(
                                           radius: 35,
-                                          backgroundImage: riderObject
-                                                  .imageUrl.isNotEmpty
-                                              ? NetworkImage(
-                                                      riderObject.imageUrl)
-                                                  as ImageProvider<Object>
-                                              : const AssetImage(
-                                                  'lib/images/no_image.jpg'),
+                                          backgroundImage: riderObject.imageUrl.isNotEmpty
+                                              ? NetworkImage(riderObject.imageUrl) as ImageProvider<Object>
+                                              : const AssetImage('lib/images/no_image.jpg'),
                                         ),
                                       ],
                                     ),
