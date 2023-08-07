@@ -70,3 +70,39 @@ Future<bool> addFriend(friendId) async {
     return false;
   }
 }
+
+Future<bool> removeFriend(friendId) async {
+  DocumentReference friendRef = getUserReferenceById(friendId);
+  DocumentReference loggedRef = getLoggedUserReference();
+
+  try {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .collection('friends')
+        .where('user_ref', isEqualTo: friendRef)
+        .get()
+        .then((QuerySnapshot snapshot) {
+      for (var doc in snapshot.docs) {
+        doc.reference.delete();
+      }
+    });
+
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(friendId)
+        .collection('friends')
+        .where('user_ref', isEqualTo: loggedRef)
+        .get()
+        .then((QuerySnapshot snapshot) {
+      for (var doc in snapshot.docs) {
+        doc.reference.delete();
+      }
+    });
+    return true;
+  } catch (err) {
+    // ignore: avoid_print
+    print('Error $err');
+    return false;
+  }
+}

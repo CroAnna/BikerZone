@@ -77,7 +77,16 @@ class _FriendListScreenState extends State<FriendListScreen> {
                                         icon: Icons.person_remove,
                                         iconColor: const Color(0xFFA41723),
                                         color: const Color(0xFFF9B0B0),
-                                        onTap: () {});
+                                        onTap: () async {
+                                          final res = await removeFriend(userObject.uid);
+                                          Fluttertoast.showToast(
+                                            msg: res == true ? "Uklonjen iz prijatelja." : "Pogreška.",
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                            backgroundColor: res == true ? const Color(0xFF528C9E) : const Color(0xFFA41723),
+                                            textColor: Colors.white,
+                                          );
+                                        });
                                   } else {
                                     return const Text('User not found');
                                   }

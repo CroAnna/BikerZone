@@ -63,7 +63,7 @@ class _WhatsHotScreenState extends State<WhatsHotScreen> {
                                 onTap: () async {
                                   final res = await addFriend(user.uid);
                                   Fluttertoast.showToast(
-                                    msg: res == true ? "Dodan za prijatelja" : "Uklonjen iz prijatelja",
+                                    msg: res == true ? "Dodan za prijatelja!" : "Pogreška.",
                                     toastLength: Toast.LENGTH_SHORT,
                                     gravity: ToastGravity.BOTTOM,
                                     backgroundColor: res == true ? const Color(0xFF528C9E) : const Color(0xFFA41723),
