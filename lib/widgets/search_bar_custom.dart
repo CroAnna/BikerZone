@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
 
-class SearchBarCustom extends StatelessWidget {
-  final TextEditingController controller;
+class SearchBarCustom extends StatefulWidget {
+  String inputText;
+  Function initSearch;
 
-  const SearchBarCustom({
-    super.key,
-    required this.controller,
-  });
+  SearchBarCustom({super.key, required this.inputText, required this.initSearch});
 
+  @override
+  State<SearchBarCustom> createState() => _SearchBarCustomState();
+}
+
+class _SearchBarCustomState extends State<SearchBarCustom> {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: controller,
+      onChanged: (text) {
+        print(text);
+        setState(() {
+          widget.inputText = text;
+        });
+        widget.initSearch(text);
+      },
       decoration: const InputDecoration(
         contentPadding: EdgeInsets.symmetric(
           vertical: 15,
