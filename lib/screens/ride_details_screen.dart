@@ -5,6 +5,7 @@ import 'package:bikerzone/services/user_service.dart';
 import 'package:bikerzone/widgets/large_button_custom.dart';
 import 'package:bikerzone/widgets/stop_points_custom.dart';
 import 'package:bikerzone/widgets/top_navigation_custom.dart';
+import 'package:bikerzone/widgets/user_card_custom.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -188,7 +189,12 @@ class DetailsCard1 extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(width: 10),
-                    CircleAvatar(radius: screenWidth / 15, backgroundImage: NetworkImage(user.imageUrl)),
+                    CircleAvatar(
+                      radius: screenWidth / 20,
+                      backgroundImage: user.imageUrl.isNotEmpty
+                          ? NetworkImage(user.imageUrl) as ImageProvider<Object>
+                          : const AssetImage('lib/images/no_image.jpg'),
+                    ),
                     const SizedBox(width: 5),
                   ],
                 ),
@@ -417,6 +423,7 @@ class DetailsCard4 extends StatelessWidget {
                 final riders = snapshot.data!.docs;
 
                 return SizedBox(
+                  width: 380,
                   height: riders.isEmpty ? 60 : riders.length * 91,
                   child: riders.isEmpty
                       ? const Center(child: Text("Još nema drugih bajkera na ovoj vožnji."))
@@ -436,63 +443,7 @@ class DetailsCard4 extends StatelessWidget {
                                 if (snapshot.hasData && snapshot.data!.exists) {
                                   final riderObject = UserC.fromDocument(snapshot.data!);
 
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                                    child: Stack(
-                                      children: [
-                                        Positioned(
-                                          right: 0,
-                                          child: Container(
-                                            height: 70,
-                                            alignment: Alignment.centerLeft,
-                                            width: screenWidth * 0.7,
-                                            decoration: BoxDecoration(
-                                                color: const Color(0xFFEAEAEA),
-                                                border: Border.all(color: const Color(0xFF0276B4), width: 2),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color: const Color(0xFF0276B4).withOpacity(0.5),
-                                                    blurRadius: 4,
-                                                    offset: const Offset(0, 4),
-                                                  )
-                                                ],
-                                                borderRadius: BorderRadius.circular(16)),
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(left: 35),
-                                              child: Column(
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                                children: [
-                                                  Text(
-                                                    riderObject.username,
-                                                    style: const TextStyle(
-                                                        fontSize: 18, fontWeight: FontWeight.w600, color: Color(0xFF444444)),
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      const Icon(
-                                                        Icons.two_wheeler,
-                                                        size: 24,
-                                                        color: Color(0xFF0276B4),
-                                                      ),
-                                                      const SizedBox(width: 5),
-                                                      Text("${riderObject.bike.manufacturer} ${riderObject.bike.model}"),
-                                                    ],
-                                                  )
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                        CircleAvatar(
-                                          radius: 35,
-                                          backgroundImage: riderObject.imageUrl.isNotEmpty
-                                              ? NetworkImage(riderObject.imageUrl) as ImageProvider<Object>
-                                              : const AssetImage('lib/images/no_image.jpg'),
-                                        ),
-                                      ],
-                                    ),
-                                  );
+                                  return UserCardCustom(user: riderObject, setWidth: 290);
                                 } else {
                                   return const Text('User not found');
                                 }
