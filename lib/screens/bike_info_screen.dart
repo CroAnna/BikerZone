@@ -17,7 +17,7 @@ class _BikeInfoScreenState extends State<BikeInfoScreen> {
   String dropdownManufacturerValue = "Aprilia";
 
   void addBike() {
-    Navigator.pop(context); 
+    Navigator.pop(context);
     addBikeDetails(bikeModelController.text, parseBikeYear(bikeYearController.text), dropdownManufacturerValue);
   }
 
@@ -59,6 +59,7 @@ class _BikeInfoScreenState extends State<BikeInfoScreen> {
               "Moto Guzzi",
               "Piaggio",
               "Suzuki",
+              "Tomos",
               "Yamaha"
             ],
             dropdownValue: dropdownManufacturerValue,
