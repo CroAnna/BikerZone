@@ -1,10 +1,11 @@
 import 'package:bikerzone/services/user_service.dart';
+import 'package:bikerzone/widgets/dropdown_custom.dart';
 import 'package:bikerzone/widgets/input_field_custom.dart';
 import 'package:bikerzone/widgets/large_button_custom.dart';
 import 'package:flutter/material.dart';
 
 class BikeInfoScreen extends StatefulWidget {
-  BikeInfoScreen({super.key});
+  const BikeInfoScreen({super.key});
 
   @override
   State<BikeInfoScreen> createState() => _BikeInfoScreenState();
@@ -13,11 +14,18 @@ class BikeInfoScreen extends StatefulWidget {
 class _BikeInfoScreenState extends State<BikeInfoScreen> {
   final bikeModelController = TextEditingController();
   final bikeYearController = TextEditingController();
-  String dropdownBikeBrandValue = "";
+  String dropdownManufacturerValue = "Aprilia";
 
   void addBike() {
-    Navigator.pop(context); // TODO check if it's still loading shown
-    addBikeDetails(bikeModelController.text, bikeYearController.text, "proizvodacNeki");
+    Navigator.pop(context); 
+    addBikeDetails(bikeModelController.text, parseBikeYear(bikeYearController.text), dropdownManufacturerValue);
+  }
+
+  int parseBikeYear(String input) {
+    String numericOnly = input.replaceAll(RegExp(r'\D'), '');
+    numericOnly = numericOnly.replaceAll('.', '');
+    int bikeYear = int.tryParse(numericOnly) ?? 0;
+    return bikeYear;
   }
 
   @override
@@ -26,7 +34,40 @@ class _BikeInfoScreenState extends State<BikeInfoScreen> {
       body: SafeArea(
           child: Column(
         children: [
-          const Center(child: Text("Podaci o Vašem motoru")),
+          const Padding(
+            padding: EdgeInsets.only(top: 60, bottom: 30),
+            child: Center(
+              child: Text(
+                "Podaci o Vašem motoru",
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Color(0xFF444444),
+                ),
+              ),
+            ),
+          ),
+          DropdownCustom(
+            labelText: "Proizvođač:",
+            dropdownList: const [
+              "Aprilia",
+              "BMW",
+              "Ducati",
+              "Harley-Davidson",
+              "Honda",
+              "Kawasaki",
+              "KTM",
+              "Moto Guzzi",
+              "Piaggio",
+              "Suzuki",
+              "Yamaha"
+            ],
+            dropdownValue: dropdownManufacturerValue,
+            onChanged: (String? newValue) {
+              setState(() {
+                dropdownManufacturerValue = newValue!;
+              });
+            },
+          ),
           InputFieldCustom(
             controller: bikeModelController,
             hintText: "npr. XR 1250",
@@ -37,7 +78,10 @@ class _BikeInfoScreenState extends State<BikeInfoScreen> {
             hintText: "npr. 2015",
             labelText: "Godište:",
           ),
-          LargeButtonCustom(onTap: addBike, btnText: "Nastavi")
+          Padding(
+            padding: const EdgeInsets.only(top: 60),
+            child: LargeButtonCustom(onTap: addBike, btnText: "Nastavi"),
+          )
         ],
       )),
     );

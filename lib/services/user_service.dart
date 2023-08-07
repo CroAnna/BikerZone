@@ -19,7 +19,7 @@ Future addUserDetails(String fullname, String username, String email, DateTime b
   }
 }
 
-Future addBikeDetails(String model, String year, String manufacturer) async {
+Future addBikeDetails(String model, int year, String manufacturer) async {
   try {
     Map<String, dynamic> bike = {
       "model": model,
