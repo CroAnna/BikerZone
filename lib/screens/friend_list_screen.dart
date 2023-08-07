@@ -1,9 +1,11 @@
 import 'package:bikerzone/models/user.dart';
+import 'package:bikerzone/services/user_service.dart';
 import 'package:bikerzone/widgets/top_navigation_custom.dart';
 import 'package:bikerzone/widgets/user_card_custom.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class FriendListScreen extends StatefulWidget {
   const FriendListScreen({
@@ -71,11 +73,11 @@ class _FriendListScreenState extends State<FriendListScreen> {
                                     final userObject = UserC.fromDocument(snapshot.data!);
 
                                     return UserCardCustom(
-                                      user: userObject,
-                                      icon: Icons.person_remove,
-                                      iconColor: const Color(0xFFA41723),
-                                      color: const Color(0xFFF9B0B0),
-                                    );
+                                        user: userObject,
+                                        icon: Icons.person_remove,
+                                        iconColor: const Color(0xFFA41723),
+                                        color: const Color(0xFFF9B0B0),
+                                        onTap: () {});
                                   } else {
                                     return const Text('User not found');
                                   }

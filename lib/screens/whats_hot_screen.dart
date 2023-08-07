@@ -1,8 +1,10 @@
 import 'package:bikerzone/models/user.dart';
+import 'package:bikerzone/services/user_service.dart';
 import 'package:bikerzone/widgets/search_bar_custom.dart';
 import 'package:bikerzone/widgets/user_card_custom.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class WhatsHotScreen extends StatefulWidget {
   WhatsHotScreen({super.key});
@@ -58,6 +60,16 @@ class _WhatsHotScreenState extends State<WhatsHotScreen> {
                                 icon: Icons.person_add,
                                 color: const Color(0xFF0276B4),
                                 iconColor: const Color(0xFFEAEAEA),
+                                onTap: () async {
+                                  final res = await addFriend(user.uid);
+                                  Fluttertoast.showToast(
+                                    msg: res == true ? "Dodan za prijatelja" : "Uklonjen iz prijatelja",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    backgroundColor: res == true ? const Color(0xFF528C9E) : const Color(0xFFA41723),
+                                    textColor: Colors.white,
+                                  );
+                                },
                               );
                             },
                           ),

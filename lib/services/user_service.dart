@@ -43,3 +43,30 @@ DocumentReference getLoggedUserReference() {
   final userReference = FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser?.uid);
   return userReference;
 }
+
+DocumentReference getUserReferenceById(userId) {
+  final userReference = FirebaseFirestore.instance.collection('users').doc(userId);
+  return userReference;
+}
+
+Future<bool> addFriend(friendId) async {
+  DocumentReference friendRef = getUserReferenceById(friendId);
+  DocumentReference loggedRef = getLoggedUserReference();
+
+  try {
+    // add friend to logged user
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser?.uid)
+        .collection('friends')
+        .add({'user_ref': friendRef});
+
+    // add friend to friend user
+    await FirebaseFirestore.instance.collection('users').doc(friendId).collection('friends').add({'user_ref': loggedRef});
+    return true;
+  } catch (err) {
+    // ignore: avoid_print
+    print('Error $err');
+    return false;
+  }
+}

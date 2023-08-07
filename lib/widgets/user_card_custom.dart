@@ -7,7 +7,10 @@ class UserCardCustom extends StatelessWidget {
   final Color? color;
   final Color? iconColor;
   final double setWidth;
-  const UserCardCustom({super.key, required this.user, this.icon, this.color, this.iconColor = Colors.black, this.setWidth = 0});
+  final Function()? onTap;
+
+  const UserCardCustom(
+      {super.key, required this.user, this.icon, this.color, this.iconColor = Colors.black, this.setWidth = 0, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -58,21 +61,24 @@ class UserCardCustom extends StatelessWidget {
                         )
                       ],
                     ),
-                    Container(
-                      height: 70,
-                      decoration: BoxDecoration(
-                        color: color,
-                        borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(13),
-                          bottomRight: Radius.circular(13),
+                    GestureDetector(
+                      onTap: onTap,
+                      child: Container(
+                        height: 70,
+                        decoration: BoxDecoration(
+                          color: color,
+                          borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(13),
+                            bottomRight: Radius.circular(13),
+                          ),
                         ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 25),
-                        child: Icon(
-                          icon,
-                          size: 30,
-                          color: iconColor,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25),
+                          child: Icon(
+                            icon,
+                            size: 30,
+                            color: iconColor,
+                          ),
                         ),
                       ),
                     )
