@@ -1,6 +1,7 @@
 import 'package:bikerzone/models/ride.dart';
 import 'package:bikerzone/models/user.dart';
 import 'package:bikerzone/screens/edit_ride_screen.dart';
+import 'package:bikerzone/screens/friends_profile_screen.dart';
 import 'package:bikerzone/services/ride_service.dart';
 import 'package:bikerzone/services/user_service.dart';
 import 'package:bikerzone/widgets/large_button_custom.dart';
@@ -177,35 +178,43 @@ class DetailsCard1 extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.all(10),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        const Text(
-                          "Organizira:",
-                          style: TextStyle(color: Color(0xFF444444), fontSize: 14, fontWeight: FontWeight.w400),
-                        ),
-                        Text(
-                          user.username,
-                          style: const TextStyle(color: Color(0xFF444444), fontSize: 16, fontWeight: FontWeight.w400),
-                        ),
-                        Text(
-                          "${user.fullname}, ${calculateYears(user.birthday)}",
-                          style: const TextStyle(color: Color(0xFF444444), fontSize: 16, fontWeight: FontWeight.w600),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 10),
-                    CircleAvatar(
-                      radius: screenWidth / 20,
-                      backgroundImage: user.imageUrl.isNotEmpty
-                          ? NetworkImage(user.imageUrl) as ImageProvider<Object>
-                          : const AssetImage('lib/images/no_image.jpg'),
-                    ),
-                    const SizedBox(width: 5),
-                  ],
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      UnanimatedRoute(builder: (context) => FriendsProfileScreen(user: user)),
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          const Text(
+                            "Organizira:",
+                            style: TextStyle(color: Color(0xFF444444), fontSize: 14, fontWeight: FontWeight.w400),
+                          ),
+                          Text(
+                            user.username,
+                            style: const TextStyle(color: Color(0xFF444444), fontSize: 16, fontWeight: FontWeight.w400),
+                          ),
+                          Text(
+                            "${user.fullname}, ${calculateYears(user.birthday)}",
+                            style: const TextStyle(color: Color(0xFF444444), fontSize: 16, fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 10),
+                      CircleAvatar(
+                        radius: screenWidth / 20,
+                        backgroundImage: user.imageUrl.isNotEmpty
+                            ? NetworkImage(user.imageUrl) as ImageProvider<Object>
+                            : const AssetImage('lib/images/no_image.jpg'),
+                      ),
+                      const SizedBox(width: 5),
+                    ],
+                  ),
                 ),
               )
             ],

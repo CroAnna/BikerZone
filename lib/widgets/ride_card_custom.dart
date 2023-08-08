@@ -230,7 +230,6 @@ class _RideCardCustomState extends State<RideCardCustom> {
                           ],
                         ),
                       ),
-                      Text("+ ${widget.ride.maxPeople}")
                     ],
                   ),
                   const SizedBox(height: 5),

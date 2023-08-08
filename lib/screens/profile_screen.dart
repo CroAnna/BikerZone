@@ -62,7 +62,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      UserDataCustom(textTitle: "Osnovno o meni",user:user, itemsList: [
+                      UserDataCustom(textTitle: "Osnovno o meni", user: user, itemsList: [
                         {"icon": Icons.person, "text": data},
                         {"icon": Icons.person_pin_circle, "text": user.fullname},
                         {
@@ -115,7 +115,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   child: Text(
                                     "Moji prijatelji",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(color: Color(0xFFFFF3E5), fontWeight: FontWeight.w500, fontSize: 24),
+                                    style: TextStyle(color: Color(0xFFFFF3E5), fontWeight: FontWeight.w500, fontSize: 20),
                                   ),
                                 ),
                               ),

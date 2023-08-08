@@ -3,11 +3,13 @@ import 'package:bikerzone/screens/edit_profile_screen.dart';
 import 'package:bikerzone/widgets/unanimated_route.dart';
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class UserDataCustom extends StatelessWidget {
   final List<Map<String, dynamic>> itemsList;
   final String textTitle;
   final UserC user;
-  const UserDataCustom({Key? key, required this.itemsList, required this.textTitle, required this.user}) : super(key: key);
+  bool canEdit;
+  UserDataCustom({Key? key, required this.itemsList, required this.textTitle, required this.user, this.canEdit = true}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -89,28 +91,30 @@ class UserDataCustom extends StatelessWidget {
                         UnanimatedRoute(builder: (context) => EditProfileScreen(user: user)),
                       );
                     },
-                    child: Container(
-                        height: 70,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: const Color(0xFFF9B0B0),
-                        ),
-                        width: screenWidth * 0.30,
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Container(
-                            margin: const EdgeInsets.only(right: 28),
-                            child: const Icon(
-                              Icons.edit,
-                              color: Color(0xFF444444),
-                              size: 32,
+                    child: canEdit
+                        ? Container(
+                            height: 70,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: const Color(0xFFF9B0B0),
                             ),
-                          ),
-                        )),
+                            width: screenWidth * 0.30,
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Container(
+                                margin: const EdgeInsets.only(right: 28),
+                                child: const Icon(
+                                  Icons.edit,
+                                  color: Color(0xFF444444),
+                                  size: 32,
+                                ),
+                              ),
+                            ))
+                        : const SizedBox(width: 0),
                   ),
                 ),
                 Container(
-                  width: screenWidth * 0.7,
+                  width: canEdit ? screenWidth * 0.7 : screenWidth,
                   height: 70,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
@@ -120,7 +124,7 @@ class UserDataCustom extends StatelessWidget {
                     child: Text(
                       textTitle,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(color: Color(0xFFFFF3E5), fontWeight: FontWeight.w500, fontSize: 24),
+                      style: const TextStyle(color: Color(0xFFFFF3E5), fontWeight: FontWeight.w500, fontSize: 20),
                     ),
                   ),
                 ),
