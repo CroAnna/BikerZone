@@ -5,6 +5,7 @@ import 'package:bikerzone/widgets/input_field_custom.dart';
 import 'package:bikerzone/widgets/large_button_custom.dart';
 import 'package:bikerzone/widgets/top_navigation_custom.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class AddRideScreen extends StatefulWidget {
   const AddRideScreen({super.key});
@@ -302,6 +303,14 @@ class _AddRideScreenState extends State<AddRideScreen> {
                   setState(() {
                     rideId = id;
                   });
+                  Fluttertoast.showToast(
+                    msg: id.isNotEmpty ? "Vožnja je uspješno objavljena!" : "Došlo je do greške. Pokušajte ponovo.",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    backgroundColor: id.isNotEmpty ? const Color(0xFF528C9E) : const Color(0xFFA41723),
+                    textColor: Colors.white,
+                  );
+
                   // ignore: use_build_context_synchronously
                   Navigator.pop(context);
                 },
