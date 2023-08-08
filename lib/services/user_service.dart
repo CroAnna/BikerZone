@@ -1,3 +1,4 @@
+import 'package:bikerzone/services/general_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
@@ -103,6 +104,34 @@ Future<bool> removeFriend(friendId) async {
   } catch (err) {
     // ignore: avoid_print
     print('Error $err');
+    return false;
+  }
+}
+
+Future<bool> updateUser(
+  fullnameController,
+  usernameController,
+  birthdayController,
+  descriptionController,
+  bikeManufacturerController,
+  bikeModelController,
+  bikeYearController,
+) async {
+  final userReference = getLoggedUserReference();
+  try {
+    await userReference.update({
+      'username': usernameController.text,
+      'fullname': fullnameController.text,
+      'description': descriptionController.text,
+      'birthday': birthdayController,
+      'bike.manufacturer': bikeManufacturerController,
+      'bike.model': bikeModelController.text,
+      'bike.year': parseBikeYear(bikeYearController),
+    });
+    return true;
+  } catch (err) {
+    // ignore: avoid_print
+    print("Error: $err");
     return false;
   }
 }

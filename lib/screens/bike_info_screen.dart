@@ -1,3 +1,4 @@
+import 'package:bikerzone/services/general_service.dart';
 import 'package:bikerzone/services/user_service.dart';
 import 'package:bikerzone/widgets/dropdown_custom.dart';
 import 'package:bikerzone/widgets/input_field_custom.dart';
@@ -19,13 +20,6 @@ class _BikeInfoScreenState extends State<BikeInfoScreen> {
   void addBike() {
     Navigator.pop(context);
     addBikeDetails(bikeModelController.text, parseBikeYear(bikeYearController.text), dropdownManufacturerValue);
-  }
-
-  int parseBikeYear(String input) {
-    String numericOnly = input.replaceAll(RegExp(r'\D'), '');
-    numericOnly = numericOnly.replaceAll('.', '');
-    int bikeYear = int.tryParse(numericOnly) ?? 0;
-    return bikeYear;
   }
 
   @override

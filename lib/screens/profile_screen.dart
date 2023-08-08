@@ -62,7 +62,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      UserDataCustom(textTitle: "Osnovno o meni", itemsList: [
+                      UserDataCustom(textTitle: "Osnovno o meni",user:user, itemsList: [
                         {"icon": Icons.person, "text": data},
                         {"icon": Icons.person_pin_circle, "text": user.fullname},
                         {
@@ -75,7 +75,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         onTap: () => {
                           Navigator.push(
                             context,
-                            UnanimatedRoute(builder: (context) => FriendListScreen()),
+                            UnanimatedRoute(builder: (context) => const FriendListScreen()),
                           )
                         },
                         child: Container(
