@@ -91,7 +91,7 @@ class DetailsCard1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(15),
+      margin: const EdgeInsets.only(top: 15, left: 15, right: 15, bottom: 0),
       width: screenWidth * 0.9,
       height: 250,
       decoration: BoxDecoration(
@@ -234,67 +234,72 @@ class DetailsCard2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: screenWidth * 0.9,
-      decoration: BoxDecoration(
-        color: const Color(0xFFEEEEEE),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 4,
-            offset: const Offset(2, 4),
-          )
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            width: screenWidth * 0.57,
-            decoration: BoxDecoration(
-              color: const Color(0xFFF9B0B0),
-              borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), bottomRight: Radius.circular(16)),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  blurRadius: 4,
-                  offset: const Offset(2, 4),
-                )
-              ],
-            ),
-            child: const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-              child: Row(
+    return ride.message == ""
+        ? const SizedBox(width: 0)
+        : Padding(
+            padding: const EdgeInsets.only(top: 15),
+            child: Container(
+              width: screenWidth * 0.9,
+              decoration: BoxDecoration(
+                color: const Color(0xFFEEEEEE),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.3),
+                    blurRadius: 4,
+                    offset: const Offset(2, 4),
+                  )
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.info, color: Color(0xFFA41723)),
-                  SizedBox(width: 5),
-                  Text(
-                    "Poruka organizatora:",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      color: Color(0xFF3F3F3F),
+                  Container(
+                    width: screenWidth * 0.57,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFF9B0B0),
+                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), bottomRight: Radius.circular(16)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          blurRadius: 4,
+                          offset: const Offset(2, 4),
+                        )
+                      ],
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      child: Row(
+                        children: [
+                          Icon(Icons.info, color: Color(0xFFA41723)),
+                          SizedBox(width: 5),
+                          Text(
+                            "Poruka organizatora:",
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                              color: Color(0xFF3F3F3F),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: Text(
+                      ride.message,
+                      style: const TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xFF3F3F3F),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(15),
-            child: Text(
-              ride.message,
-              style: const TextStyle(
-                fontSize: 15,
-                fontWeight: FontWeight.w400,
-                color: Color(0xFF3F3F3F),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
+          );
   }
 }
 
@@ -334,9 +339,9 @@ class DetailsCard3 extends StatelessWidget {
           )
         ],
       ),
-      margin: const EdgeInsets.only(top: 20),
+      margin: const EdgeInsets.only(top: 15),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 0),
         child: Column(
           children: [
             Flexible(
