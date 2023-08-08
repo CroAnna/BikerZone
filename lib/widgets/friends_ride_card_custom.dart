@@ -1,16 +1,16 @@
+import 'package:bikerzone/models/ride.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class FriendsRideCardCustom extends StatelessWidget {
-  const FriendsRideCardCustom({super.key});
+  const FriendsRideCardCustom({super.key, required this.ride});
+  final Ride ride;
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        width: screenWidth * 0.7,
         decoration: BoxDecoration(
           color: const Color(0xFFEAEAEA),
           borderRadius: BorderRadius.circular(16),
@@ -28,7 +28,7 @@ class FriendsRideCardCustom extends StatelessWidget {
             width: 95,
             decoration: BoxDecoration(
               color: const Color(0xFF394949),
-              borderRadius: BorderRadius.only(topLeft: Radius.circular(16), bottomRight: Radius.circular(16)),
+              borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), bottomRight: Radius.circular(16)),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.25),
@@ -38,15 +38,15 @@ class FriendsRideCardCustom extends StatelessWidget {
                 ),
               ],
             ),
-            child: const Padding(
-              padding: EdgeInsets.symmetric(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
                 vertical: 5,
               ),
               child: Center(
                 child: Text(
-                  "15.15.2005.",
+                  DateFormat('d.M.yyyy.').format(ride.startDaT),
                   textAlign: TextAlign.left,
-                  style: TextStyle(color: Color(0xFFEAEAEA)),
+                  style: const TextStyle(color: Color(0xFFEAEAEA)),
                 ),
               ),
             ),
@@ -54,19 +54,19 @@ class FriendsRideCardCustom extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Column(
+              Column(
                 children: [
                   Text(
-                    "Karlovac",
-                    style: TextStyle(
+                    ride.startingPoint,
+                    style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
                       color: Color(0xFF444444),
                     ),
                   ),
                   Text(
-                    "55:55",
-                    style: TextStyle(
+                    DateFormat('H:mm').format(ride.startDaT),
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                       color: Color(0xFF444444),
@@ -83,19 +83,19 @@ class FriendsRideCardCustom extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 10),
-              const Column(
+              Column(
                 children: [
                   Text(
-                    "Karlovac",
-                    style: TextStyle(
+                    ride.finishingPoint,
+                    style: const TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 16,
                       color: Color(0xFF444444),
                     ),
                   ),
                   Text(
-                    "55:55",
-                    style: TextStyle(
+                    DateFormat('H:mm').format(ride.finishDaT),
+                    style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 20,
                       color: Color(0xFF444444),

@@ -62,7 +62,7 @@ class _FriendListScreenState extends State<FriendListScreen> {
                     height: friends.length * 91,
                     child: friends.isEmpty
                         ? const Center(
-                            child: Text("Još nema drugih bajkera na ovoj vožnji."),
+                            child: Text("Nemate prijatelja."),
                           )
                         : ListView.builder(
                             itemCount: friends.length,
