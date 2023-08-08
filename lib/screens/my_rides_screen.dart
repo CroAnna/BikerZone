@@ -27,6 +27,7 @@ class _MyRidesScreenState extends State<MyRidesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFEAF2F4),
       body: SafeArea(
           child: Column(
         children: [

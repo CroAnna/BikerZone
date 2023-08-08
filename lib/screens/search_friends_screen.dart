@@ -1,19 +1,20 @@
 import 'package:bikerzone/models/user.dart';
 import 'package:bikerzone/services/user_service.dart';
 import 'package:bikerzone/widgets/search_bar_custom.dart';
+import 'package:bikerzone/widgets/top_navigation_custom.dart';
 import 'package:bikerzone/widgets/user_card_custom.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-class WhatsHotScreen extends StatefulWidget {
-  WhatsHotScreen({super.key});
+class SearchFriendsScreen extends StatefulWidget {
+  const SearchFriendsScreen({super.key});
 
   @override
-  State<WhatsHotScreen> createState() => _WhatsHotScreenState();
+  State<SearchFriendsScreen> createState() => _SearchFriendsScreenState();
 }
 
-class _WhatsHotScreenState extends State<WhatsHotScreen> {
+class _SearchFriendsScreenState extends State<SearchFriendsScreen> {
   Future<QuerySnapshot>? usersList;
   String usernameText = '';
 
@@ -41,6 +42,12 @@ class _WhatsHotScreenState extends State<WhatsHotScreen> {
           height: 600,
           child: Column(
             children: [
+              TopNavigationCustom(
+                leftIcon: Icons.arrow_back,
+                mainText: "Pronađi prijatelje",
+                rightIcon: null,
+                isSmall: true,
+              ),
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: SearchBarCustom(inputText: usernameText, initSearch: initSearchFromTheBeginning),

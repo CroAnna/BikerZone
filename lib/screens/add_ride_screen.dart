@@ -56,6 +56,7 @@ class _AddRideScreenState extends State<AddRideScreen> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: const Color(0xFFEAF2F4),
       body: SafeArea(
           child: SingleChildScrollView(
         child: Column(

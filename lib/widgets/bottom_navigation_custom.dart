@@ -1,14 +1,12 @@
 import 'package:bikerzone/screens/find_ride_screen.dart';
 import 'package:bikerzone/screens/home_screen.dart';
 import 'package:bikerzone/screens/profile_screen.dart';
-import 'package:bikerzone/screens/whats_hot_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 
 List<Widget> _widgetOptions = <Widget>[
   const HomeScreen(),
   const FindRideScreen(),
-  WhatsHotScreen(),
   const ProfileScreen(),
 ];
 
@@ -30,10 +28,7 @@ Scaffold bottomNavigationCustom(BuildContext context, int selectedIndex, Functio
           icon: Icon(Icons.language, size: selectedIndex == 1 ? 50 : 40),
         ),
         DotNavigationBarItem(
-          icon: Icon(Icons.whatshot, size: selectedIndex == 2 ? 50 : 40),
-        ),
-        DotNavigationBarItem(
-          icon: Icon(Icons.person, size: selectedIndex == 3 ? 50 : 40),
+          icon: Icon(Icons.person, size: selectedIndex == 2 ? 50 : 40),
         ),
       ],
       enablePaddingAnimation: false,

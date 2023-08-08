@@ -1,4 +1,5 @@
 import 'package:bikerzone/screens/add_ride_screen.dart';
+import 'package:bikerzone/screens/friends_activity_screen.dart';
 import 'package:bikerzone/screens/my_rides_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -11,8 +12,8 @@ class HomeScreen extends StatelessWidget {
     final List<Map<String, dynamic>> itemsList;
     itemsList = [
       {"imgName": "motorbike", "text": "Nova grupna vožnja", "page": const AddRideScreen()},
-      {"imgName": "camera", "text": "Današnja slika", "page": const AddRideScreen()},
-      {"imgName": "rider", "text": "Moje vožnje", "page": MyRidesScreen()},
+      {"imgName": "rider", "text": "Moje vožnje", "page": const MyRidesScreen()},
+      {"imgName": "world", "text": "Aktivnosti prijatelja", "page": const FriendsActivityScreen()},
     ];
 
     return Scaffold(
