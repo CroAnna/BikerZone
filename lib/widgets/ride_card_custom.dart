@@ -54,78 +54,105 @@ class _RideCardCustomState extends State<RideCardCustom> {
           children: [
             SizedBox(
               width: cardWidth * 0.55,
-              child: Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8),
-                          child: Text(
-                            DateFormat('H:mm').format(widget.ride.startDaT),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              color: Color(0xFF444444),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Image.asset(
-                            'lib/images/destination.png',
-                            height: 50,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8),
-                          child: Text(
-                            DateFormat('H:mm').format(widget.ride.finishDaT),
-                            style: const TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20,
-                              color: Color(0xFF444444),
-                            ),
-                          ),
+                  Container(
+                    width: 100,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFA41723),
+                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), bottomRight: Radius.circular(16)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.25),
+                          spreadRadius: 0,
+                          blurRadius: 4,
+                          offset: const Offset(0, 4),
                         ),
                       ],
+                    ),
+                    child: Center(
+                      child: Text(
+                        DateFormat('d.M.yyyy.').format(widget.ride.startDaT),
+                        style: const TextStyle(color: Color(0xFFEAEAEA), fontWeight: FontWeight.w500, fontSize: 16),
+                      ),
                     ),
                   ),
-                  SizedBox(
-                    width: cardWidth * 0.30,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          widget.ride.startingPoint,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                            color: Color(0xFF444444),
-                          ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: Text(
+                                DateFormat('H:mm').format(widget.ride.startDaT),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Color(0xFF444444),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Image.asset(
+                                'lib/images/destination.png',
+                                height: 50,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8),
+                              child: Text(
+                                DateFormat('H:mm').format(widget.ride.finishDaT),
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 20,
+                                  color: Color(0xFF444444),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 20),
-                        const Text(
-                          "...",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 20,
-                            color: Color(0xFF444444),
-                          ),
+                      ),
+                      SizedBox(
+                        width: cardWidth * 0.30,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              widget.ride.startingPoint,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                                color: Color(0xFF444444),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            const Text(
+                              "...",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20,
+                                color: Color(0xFF444444),
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              widget.ride.finishingPoint,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16,
+                                color: Color(0xFF444444),
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 20),
-                        Text(
-                          widget.ride.finishingPoint,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                            color: Color(0xFF444444),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -137,14 +164,11 @@ class _RideCardCustomState extends State<RideCardCustom> {
                 children: [
                   Container(
                     decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(16),
-                          bottomLeft: Radius.circular(16)),
+                      borderRadius: BorderRadius.only(topRight: Radius.circular(16), bottomLeft: Radius.circular(16)),
                       color: Color(0xFFDEDEDE),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.only(
-                          top: 10, bottom: 10, left: 15, right: 5),
+                      padding: const EdgeInsets.only(top: 10, bottom: 10, left: 15, right: 5),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
@@ -155,9 +179,7 @@ class _RideCardCustomState extends State<RideCardCustom> {
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            widget.ride.acceptType == "-"
-                                ? "Svi motori"
-                                : widget.ride.acceptType,
+                            widget.ride.acceptType == "-" ? "Svi motori" : widget.ride.acceptType,
                             style: const TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 16,
@@ -201,8 +223,7 @@ class _RideCardCustomState extends State<RideCardCustom> {
                             CircleAvatar(
                               radius: screenWidth / 20,
                               backgroundImage: widget.user.imageUrl.isNotEmpty
-                                  ? NetworkImage(widget.user.imageUrl)
-                                      as ImageProvider<Object>
+                                  ? NetworkImage(widget.user.imageUrl) as ImageProvider<Object>
                                   : const AssetImage('lib/images/no_image.jpg'),
                             ),
                             Text("  ${widget.user.username}"),
