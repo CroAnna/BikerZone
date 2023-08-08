@@ -7,7 +7,7 @@ Future<T> getDocumentByIdEveryType<T>(String collectionName, String? documentId,
   return fromSnapshot(snapshot);
 }
 
-int parseBikeYear(String input) {
+int parseToPureNumber(String input) {
   String numericOnly = input.replaceAll(RegExp(r'\D'), '');
   numericOnly = numericOnly.replaceAll('.', '');
   int bikeYear = int.tryParse(numericOnly) ?? 0;

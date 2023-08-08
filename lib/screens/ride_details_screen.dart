@@ -1,10 +1,12 @@
 import 'package:bikerzone/models/ride.dart';
 import 'package:bikerzone/models/user.dart';
+import 'package:bikerzone/screens/edit_ride_screen.dart';
 import 'package:bikerzone/services/ride_service.dart';
 import 'package:bikerzone/services/user_service.dart';
 import 'package:bikerzone/widgets/large_button_custom.dart';
 import 'package:bikerzone/widgets/stop_points_custom.dart';
 import 'package:bikerzone/widgets/top_navigation_custom.dart';
+import 'package:bikerzone/widgets/unanimated_route.dart';
 import 'package:bikerzone/widgets/user_card_custom.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -52,11 +54,13 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                 child: LargeButtonCustom(
                     onTap: widget.user.uid == FirebaseAuth.instance.currentUser!.uid
                         ? () {
-                            print("object");
+                            Navigator.push(
+                              context,
+                              UnanimatedRoute(builder: (context) => EditRideScreen(ride: widget.ride)),
+                            );
                           }
                         : () async {
                             final res = await addRiderToThisRide(getLoggedUserReference(), widget.ride);
-                            print(res.toString());
 
                             Fluttertoast.showToast(
                               msg: res == true ? "Uspješno ste se pridružili!" : "Već ste se pridružili ovoj vožnji!",

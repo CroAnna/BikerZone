@@ -1,4 +1,5 @@
 import 'package:bikerzone/models/ride.dart';
+import 'package:bikerzone/services/general_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -60,6 +61,45 @@ Future<bool> addRiderToThisRide(DocumentReference userRef, Ride ride) async {
 
     return true;
   } else {
+    return false;
+  }
+}
+
+Future<bool> updateRide(
+    startingCityController,
+    exactStartingPointController,
+    finishingCityController,
+    startingDaTController,
+    finishingDaTController,
+    highway,
+    dropdownBikeValue,
+    dropdownPaceValue,
+    nmbrOfPeopleController,
+    organizersMessageController,
+    stopPoints,
+    id,
+    userId) async {
+  final rideReference = FirebaseFirestore.instance.collection('rides').doc(id);
+  try {
+    await rideReference.update({
+      'id': id,
+      'accept_type': dropdownBikeValue,
+      'exact_starting_point': exactStartingPointController.text,
+      'finishing_point': finishingCityController.text,
+      'starting_point': startingCityController.text,
+      'finish_d_a_t': finishingDaTController,
+      'max_number_of_people': parseToPureNumber(nmbrOfPeopleController.text),
+      'highway': highway == "da" ? true : false,
+      'message': organizersMessageController.text,
+      'pace': dropdownPaceValue,
+      'start_d_a_t': startingDaTController,
+      'stop_points': stopPoints,
+      'user_id': userId,
+    });
+    return true;
+  } catch (err) {
+    // ignore: avoid_print
+    print("Error: $err");
     return false;
   }
 }

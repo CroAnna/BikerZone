@@ -126,7 +126,7 @@ Future<bool> updateUser(
       'birthday': birthdayController,
       'bike.manufacturer': bikeManufacturerController,
       'bike.model': bikeModelController.text,
-      'bike.year': parseBikeYear(bikeYearController),
+      'bike.year': parseToPureNumber(bikeYearController),
     });
     return true;
   } catch (err) {

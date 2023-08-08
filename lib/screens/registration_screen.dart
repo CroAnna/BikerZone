@@ -59,7 +59,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         Navigator.pop(context);
         Navigator.push(
           context,
-          UnanimatedRoute(builder: (context) => BikeInfoScreen()),
+          UnanimatedRoute(builder: (context) => const BikeInfoScreen()),
         );
       }
     } on FirebaseAuthException catch (error) {

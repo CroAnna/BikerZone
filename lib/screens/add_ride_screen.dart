@@ -19,9 +19,6 @@ class _AddRideScreenState extends State<AddRideScreen> {
   final finishingCityController = TextEditingController();
   DateTime? startingDaTController;
   DateTime? finishingDaTController;
-  final highwayController = TextEditingController();
-  final bikeTypeController = TextEditingController();
-  final paceController = TextEditingController();
   final nmbrOfPeopleController = TextEditingController();
   final organizersMessageController = TextEditingController();
   List<String> stopPoints = [];
@@ -92,7 +89,7 @@ class _AddRideScreenState extends State<AddRideScreen> {
               setHours: true,
               futureDateAllowed: true,
               helpText: "Datum i vrijeme polaska:",
-              labelText: "Datum i vrijeme polaska:",
+              labelText: "Datum i vrijeme polaska: **",
             ),
             InputDateCustom(
               onDataReceived: _handleFinishDataReceived,
@@ -100,7 +97,7 @@ class _AddRideScreenState extends State<AddRideScreen> {
               setHours: true,
               futureDateAllowed: true,
               helpText: "Očekivano vrijeme dolaska:",
-              labelText: "Očekivano vrijeme dolaska:",
+              labelText: "Očekivano vrijeme dolaska: **",
             ),
             DropdownCustom(
               labelText: "Tempo putovanja:",
@@ -176,7 +173,7 @@ class _AddRideScreenState extends State<AddRideScreen> {
                     alignment: Alignment.centerLeft,
                     padding: const EdgeInsets.only(left: 5, bottom: 2),
                     child: const Text(
-                      "Dodaj stajališta (opcionalno):",
+                      "Dodaj stajališta (opcionalno): **",
                       style: TextStyle(
                         fontSize: 16,
                         color: Color(0xFF4E4E4E),
@@ -272,6 +269,20 @@ class _AddRideScreenState extends State<AddRideScreen> {
               controller: organizersMessageController,
               hintText: "npr. što očekivati od vožnje",
               labelText: "Poruka organizatora: (opcionalno):",
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 7),
+              child: Container(
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.only(left: 5, bottom: 2),
+                child: const Text(
+                  "** Stajališta i vrijeme polaska i dolaska nije moguće urediti naknadno!",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Color.fromARGB(255, 131, 131, 131),
+                  ),
+                ),
+              ),
             ),
             LargeButtonCustom(
                 onTap: () async {

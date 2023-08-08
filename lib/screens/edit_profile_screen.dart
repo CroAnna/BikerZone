@@ -1,5 +1,4 @@
 import 'package:bikerzone/models/user.dart';
-import 'package:bikerzone/services/general_service.dart';
 import 'package:bikerzone/services/user_service.dart';
 import 'package:bikerzone/widgets/dropdown_custom.dart';
 import 'package:bikerzone/widgets/input_date_custom.dart';
@@ -51,7 +50,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   void update() async {
     final res = await updateUser(fullnameController, usernameController, birthdayController, descriptionController,
         dropdownManufacturerValue, bikeModelController, bikeYearController.text);
-    print(res.toString());
 
     Fluttertoast.showToast(
       msg: res == true ? "Promjene spremljene." : "Došlo je do greške. Pokušajte ponovo.",

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+// ignore: must_be_immutable
 class SearchBarCustom extends StatefulWidget {
   String inputText;
   Function initSearch;
@@ -15,7 +16,6 @@ class _SearchBarCustomState extends State<SearchBarCustom> {
   Widget build(BuildContext context) {
     return TextField(
       onChanged: (text) {
-        print(text);
         setState(() {
           widget.inputText = text;
         });

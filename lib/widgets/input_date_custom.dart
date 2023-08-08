@@ -9,18 +9,19 @@ class InputDateCustom extends StatefulWidget {
   final String labelText;
   final bool futureDateAllowed;
   bool setHours;
+  bool enabled;
   final DateTime? recievedDate;
 
-  InputDateCustom({
-    super.key,
-    required this.onDataReceived,
-    required this.hintText,
-    required this.helpText,
-    this.labelText = "",
-    this.recievedDate,
-    this.setHours = false,
-    required this.futureDateAllowed,
-  });
+  InputDateCustom(
+      {super.key,
+      required this.onDataReceived,
+      required this.hintText,
+      required this.helpText,
+      this.labelText = "",
+      this.recievedDate,
+      this.setHours = false,
+      required this.futureDateAllowed,
+      this.enabled = true});
 
   @override
   State<InputDateCustom> createState() => _InputDateCustomState();
@@ -84,8 +85,7 @@ class _InputDateCustomState extends State<InputDateCustom> {
             pickedTime.minute,
           );
 
-          controller.text =
-              DateFormat('d.M.yyyy. HH:mm').format(selectedDateTime);
+          controller.text = DateFormat('d.M.yyyy. HH:mm').format(selectedDateTime);
           widget.onDataReceived(selectedDateTime);
         }
       } else {
@@ -116,6 +116,7 @@ class _InputDateCustomState extends State<InputDateCustom> {
                 )
               : Container(),
           TextField(
+            enabled: widget.enabled,
             readOnly: true,
             controller: controller,
             decoration: InputDecoration(
@@ -124,16 +125,14 @@ class _InputDateCustomState extends State<InputDateCustom> {
                 color: Color(0xFF0276B4),
               ),
               enabledBorder: const OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFF0276B4), width: 1),
-                  borderRadius: BorderRadius.all(Radius.circular(6))),
+                  borderSide: BorderSide(color: Color(0xFF0276B4), width: 1), borderRadius: BorderRadius.all(Radius.circular(6))),
               focusedBorder: const OutlineInputBorder(
                 borderSide: BorderSide(color: Color(0xFF0276B4)),
               ),
               fillColor: const Color(0xFFEAEAEA),
               filled: true,
               hintText: widget.hintText,
-              hintStyle:
-                  const TextStyle(color: Color(0xFF898989), fontSize: 16),
+              hintStyle: const TextStyle(color: Color(0xFF898989), fontSize: 16),
             ),
             onTap: () {
               openCalendar();

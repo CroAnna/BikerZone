@@ -19,7 +19,7 @@ class _BikeInfoScreenState extends State<BikeInfoScreen> {
 
   void addBike() {
     Navigator.pop(context);
-    addBikeDetails(bikeModelController.text, parseBikeYear(bikeYearController.text), dropdownManufacturerValue);
+    addBikeDetails(bikeModelController.text, parseToPureNumber(bikeYearController.text), dropdownManufacturerValue);
   }
 
   @override
