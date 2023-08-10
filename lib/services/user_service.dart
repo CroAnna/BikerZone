@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:bikerzone/services/general_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,7 +17,6 @@ Future addUserDetails(String fullname, String username, String email, DateTime b
       "birthday": birthday,
     });
   } catch (e) {
-    // ignore: avoid_print
     print("Error adding user: $e");
   }
 }
@@ -31,7 +32,6 @@ Future addBikeDetails(String model, int year, String manufacturer) async {
       "bike": bike,
     });
   } catch (e) {
-    // ignore: avoid_print
     print("Error adding user: $e");
   }
 }
@@ -66,7 +66,6 @@ Future<bool> addFriend(friendId) async {
     await FirebaseFirestore.instance.collection('users').doc(friendId).collection('friends').add({'user_ref': loggedRef});
     return true;
   } catch (err) {
-    // ignore: avoid_print
     print('Error $err');
     return false;
   }
@@ -102,7 +101,6 @@ Future<bool> removeFriend(friendId) async {
     });
     return true;
   } catch (err) {
-    // ignore: avoid_print
     print('Error $err');
     return false;
   }
@@ -130,8 +128,18 @@ Future<bool> updateUser(
     });
     return true;
   } catch (err) {
-    // ignore: avoid_print
     print("Error: $err");
     return false;
+  }
+}
+
+Future<bool> checkIfIsFriend(DocumentReference friendRef, String userId) async {
+  final ridersSnapshot =
+      await FirebaseFirestore.instance.collection("users").doc(userId).collection('friends').where('user_ref', isEqualTo: friendRef).get();
+
+  if (ridersSnapshot.docs.isEmpty) {
+    return false;
+  } else {
+    return true;
   }
 }

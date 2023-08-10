@@ -62,24 +62,58 @@ class _SearchFriendsScreenState extends State<SearchFriendsScreen> {
                           child: ListView.builder(
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
-                              UserC user = UserC.fromDocument(snapshot.data!.docs[index]);
-                              return user.uid != FirebaseAuth.instance.currentUser!.uid
-                                  ? (UserCardCustom(
-                                      user: user,
-                                      icon: Icons.person_add,
-                                      color: const Color(0xFF0276B4),
-                                      iconColor: const Color(0xFFEAEAEA),
-                                      onTap: () async {
-                                        final res = await addFriend(user.uid);
-                                        Fluttertoast.showToast(
-                                          msg: res == true ? "Dodan za prijatelja!" : "Pogreška.",
-                                          toastLength: Toast.LENGTH_SHORT,
-                                          gravity: ToastGravity.BOTTOM,
-                                          backgroundColor: res == true ? const Color(0xFF528C9E) : const Color(0xFFA41723),
-                                          textColor: Colors.white,
-                                        );
+                              UserC friend = UserC.fromDocument(snapshot.data!.docs[index]);
+                              return friend.uid != FirebaseAuth.instance.currentUser!.uid
+                                  ? FutureBuilder(
+                                      future: checkIfIsFriend(getUserReferenceById(friend.uid), FirebaseAuth.instance.currentUser!.uid),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasError) {
+                                          return Center(child: Text('Error: ${snapshot.error}'));
+                                        }
+
+                                        if (!snapshot.hasData) {
+                                          return const Text('Loading...');
+                                        }
+                                        bool isFriend = snapshot.data ?? false;
+                                        return (UserCardCustom(
+                                          user: friend,
+                                          icon: isFriend ? Icons.person_remove : Icons.person_add,
+                                          color: isFriend ? const Color(0xFFA41723) : const Color(0xFF0276B4),
+                                          iconColor: const Color(0xFFEAEAEA),
+                                          onTap: () async {
+                                            if (isFriend == true) {
+                                              final res = await removeFriend(friend.uid);
+                                              Fluttertoast.showToast(
+                                                msg: res == true ? "Uklonjen iz prijatelja!" : "Pogreška.",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                backgroundColor: res == true ? const Color(0xFF528C9E) : const Color(0xFFA41723),
+                                                textColor: Colors.white,
+                                              );
+                                              if (res == true) {
+                                                setState(() {
+                                                  isFriend = false;
+                                                });
+                                              }
+                                            } else {
+                                              final res = await addFriend(friend.uid);
+                                              Fluttertoast.showToast(
+                                                msg: res == true ? "Dodan za prijatelja!" : "Pogreška.",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                backgroundColor: res == true ? const Color(0xFF528C9E) : const Color(0xFFA41723),
+                                                textColor: Colors.white,
+                                              );
+                                              if (res == true) {
+                                                setState(() {
+                                                  isFriend = true;
+                                                });
+                                              }
+                                            }
+                                          },
+                                        ));
                                       },
-                                    ))
+                                    )
                                   : const SizedBox(height: 0);
                             },
                           ),
