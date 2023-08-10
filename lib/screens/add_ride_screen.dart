@@ -1,4 +1,5 @@
 import 'package:bikerzone/services/ride_service.dart';
+import 'package:bikerzone/services/user_service.dart';
 import 'package:bikerzone/widgets/dropdown_custom.dart';
 import 'package:bikerzone/widgets/input_date_custom.dart';
 import 'package:bikerzone/widgets/input_field_custom.dart';
@@ -303,6 +304,7 @@ class _AddRideScreenState extends State<AddRideScreen> {
                   setState(() {
                     rideId = id;
                   });
+                  await addRiderToThisRide(getLoggedUserReference(), id);
                   Fluttertoast.showToast(
                     msg: id.isNotEmpty ? "Vožnja je uspješno objavljena!" : "Došlo je do greške. Pokušajte ponovo.",
                     toastLength: Toast.LENGTH_SHORT,

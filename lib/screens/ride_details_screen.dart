@@ -90,7 +90,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
                                         );
                                       }
                                     : () async {
-                                        final res = await addRiderToThisRide(getLoggedUserReference(), widget.ride);
+                                        final res = await addRiderToThisRide(getLoggedUserReference(), widget.ride.id);
 
                                         Fluttertoast.showToast(
                                           msg: res == true ? "Uspješno ste se pridružili!" : "Greška. Pokušajte ponovo.",

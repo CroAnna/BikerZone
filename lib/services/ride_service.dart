@@ -46,14 +46,14 @@ Future<String> addRide(
   }
 }
 
-Future<bool> addRiderToThisRide(DocumentReference userRef, Ride ride) async {
+Future<bool> addRiderToThisRide(DocumentReference userRef, String rideId) async {
   final ridersSnapshot =
-      await FirebaseFirestore.instance.collection('rides').doc(ride.id).collection('riders').where('user_id', isEqualTo: userRef).get();
+      await FirebaseFirestore.instance.collection('rides').doc(rideId).collection('riders').where('user_id', isEqualTo: userRef).get();
 
   if (ridersSnapshot.docs.isEmpty) {
-    FirebaseFirestore.instance.collection('rides').doc(ride.id).collection('riders').add({'user_id': userRef});
+    FirebaseFirestore.instance.collection('rides').doc(rideId).collection('riders').add({'user_id': userRef});
 
-    DocumentReference rideRef = FirebaseFirestore.instance.collection('rides').doc(ride.id);
+    DocumentReference rideRef = FirebaseFirestore.instance.collection('rides').doc(rideId);
 
     FirebaseFirestore.instance
         .collection('users')
