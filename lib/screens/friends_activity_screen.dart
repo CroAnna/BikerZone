@@ -1,6 +1,9 @@
 import 'package:bikerzone/models/ride.dart';
 import 'package:bikerzone/models/user.dart';
+import 'package:bikerzone/screens/friends_profile_screen.dart';
+import 'package:bikerzone/screens/ride_details_screen.dart';
 import 'package:bikerzone/screens/search_friends_screen.dart';
+import 'package:bikerzone/services/user_service.dart';
 import 'package:bikerzone/widgets/friends_ride_card_custom.dart';
 import 'package:bikerzone/widgets/top_navigation_custom.dart';
 import 'package:bikerzone/widgets/unanimated_route.dart';
@@ -103,17 +106,25 @@ class _FriendsActivityScreenState extends State<FriendsActivityScreen> {
                                           friendsRides.isNotEmpty
                                               ? Padding(
                                                   padding: const EdgeInsets.only(top: 20, left: 40),
-                                                  child: Row(
-                                                    children: [
-                                                      CircleAvatar(
-                                                        radius: 20,
-                                                        backgroundImage: friendObject.imageUrl.isNotEmpty
-                                                            ? NetworkImage(friendObject.imageUrl) as ImageProvider<Object>
-                                                            : const AssetImage('lib/images/no_image.jpg'),
-                                                      ),
-                                                      const SizedBox(width: 10),
-                                                      Text("${friendObject.username} ide na vožnje:"),
-                                                    ],
+                                                  child: GestureDetector(
+                                                    onTap: () => {
+                                                      Navigator.push(
+                                                        context,
+                                                        UnanimatedRoute(builder: (context) => FriendsProfileScreen(user: friendObject)),
+                                                      )
+                                                    },
+                                                    child: Row(
+                                                      children: [
+                                                        CircleAvatar(
+                                                          radius: 20,
+                                                          backgroundImage: friendObject.imageUrl.isNotEmpty
+                                                              ? NetworkImage(friendObject.imageUrl) as ImageProvider<Object>
+                                                              : const AssetImage('lib/images/no_image.jpg'),
+                                                        ),
+                                                        const SizedBox(width: 10),
+                                                        Text("${friendObject.username} ide na vožnje:"),
+                                                      ],
+                                                    ),
                                                   ),
                                                 )
                                               : const SizedBox(height: 0),
@@ -136,7 +147,28 @@ class _FriendsActivityScreenState extends State<FriendsActivityScreen> {
                                                     if (snapshot.hasData && snapshot.data!.exists) {
                                                       final rideObject = Ride.fromDocument(snapshot.data!);
 
-                                                      return FriendsRideCardCustom(ride: rideObject); // TODO show it if isn't finished
+                                                      return FutureBuilder(
+                                                          future: getUserReferenceById(rideObject.userId).get(),
+                                                          builder: (context, snapshot) {
+                                                            if (snapshot.hasError) {
+                                                              return Center(child: Text('Error: ${snapshot.error}'));
+                                                            }
+
+                                                            if (!snapshot.hasData) {
+                                                              return const Text('Loading...');
+                                                            }
+                                                            UserC rideCreator = UserC.fromDocument(snapshot.data!);
+                                                            return GestureDetector(
+                                                                onTap: () => {
+                                                                      Navigator.push(
+                                                                        context,
+                                                                        UnanimatedRoute(
+                                                                            builder: (context) =>
+                                                                                RideDetailsScreen(ride: rideObject, user: rideCreator)),
+                                                                      )
+                                                                    },
+                                                                child: FriendsRideCardCustom(ride: rideObject));
+                                                          }); // TODO show it if isn't finished
                                                     } else {
                                                       return const Text('User not found');
                                                     }
