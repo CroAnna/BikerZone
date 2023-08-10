@@ -49,7 +49,11 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
               DetailsCard2(screenWidth: screenWidth, ride: widget.ride, user: widget.user),
               DetailsCard3(screenWidth: screenWidth, ride: widget.ride),
               StopPointsCustom(screenWidth: screenWidth, ride: widget.ride),
-              DetailsCard4(screenWidth: screenWidth, streamRiders: _streamRiders),
+              DetailsCard4(
+                screenWidth: screenWidth,
+                streamRiders: _streamRiders,
+                user: widget.user,
+              ),
               FutureBuilder(
                   future: checkIfRiderIsInRide(getLoggedUserReference(), widget.ride),
                   builder: (context, snapshot) {
@@ -417,9 +421,10 @@ class DetailsCard3 extends StatelessWidget {
 }
 
 class DetailsCard4 extends StatelessWidget {
-  const DetailsCard4({super.key, required this.screenWidth, required this.streamRiders});
+  const DetailsCard4({super.key, required this.screenWidth, required this.streamRiders, required this.user});
   final double screenWidth;
   final dynamic streamRiders;
+  final UserC user;
 
   @override
   Widget build(BuildContext context) {
@@ -484,8 +489,8 @@ class DetailsCard4 extends StatelessWidget {
 
                 return SizedBox(
                   width: 380,
-                  height: riders.isEmpty ? 60 : riders.length * 91,
-                  child: riders.isEmpty
+                  height: riders.length == 1 ? 60 : (riders.length - 1) * 91, // first rider is ride organizer
+                  child: riders.length == 1
                       ? const Center(child: Text("Još nema drugih bajkera na ovoj vožnji."))
                       : ListView.builder(
                           itemCount: riders.length,
@@ -503,7 +508,9 @@ class DetailsCard4 extends StatelessWidget {
                                 if (snapshot.hasData && snapshot.data!.exists) {
                                   final riderObject = UserC.fromDocument(snapshot.data!);
 
-                                  return UserCardCustom(user: riderObject, setWidth: 290);
+                                  return riderObject.uid != user.uid
+                                      ? UserCardCustom(user: riderObject, setWidth: 290)
+                                      : const SizedBox(height: 0);
                                 } else {
                                   return const Text('User not found');
                                 }
