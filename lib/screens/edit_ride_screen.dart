@@ -33,6 +33,14 @@ class _EditRideScreenState extends State<EditRideScreen> {
   String dropdownBikeValue = "-";
   List<TextEditingController> stopPointsControllers = [];
 
+  bool areFieldsEmpty() {
+    return startingCityController.text.isEmpty ||
+        exactStartingPointController.text.isEmpty ||
+        finishingCityController.text.isEmpty ||
+        startingDaTController == null ||
+        finishingDaTController == null;
+  }
+
   void update() async {
     final res = await updateRide(
         startingCityController,
@@ -300,9 +308,19 @@ class _EditRideScreenState extends State<EditRideScreen> {
                 labelText: "Poruka organizatora: (opcionalno):",
               ),
               LargeButtonCustom(
-                  onTap: () {
-                    update();
-                  },
+                  onTap: areFieldsEmpty()
+                      ? () {
+                          Fluttertoast.showToast(
+                            msg: "Ispunite sva obavezna polja!",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: const Color(0xFFA41723),
+                            textColor: Colors.white,
+                          );
+                        }
+                      : () {
+                          update();
+                        },
                   btnText: "Spremi promjene"),
             ],
           ),
