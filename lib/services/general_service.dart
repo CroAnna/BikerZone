@@ -7,6 +7,11 @@ Future<T> getDocumentByIdEveryType<T>(String collectionName, String? documentId,
   return fromSnapshot(snapshot);
 }
 
+DocumentReference getReferenceById(docId, collection) {
+  final ref = FirebaseFirestore.instance.collection(collection).doc(docId);
+  return ref;
+}
+
 int parseToPureNumber(String input) {
   String numericOnly = input.replaceAll(RegExp(r'\D'), '');
   numericOnly = numericOnly.replaceAll('.', '');

@@ -50,29 +50,66 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
               DetailsCard3(screenWidth: screenWidth, ride: widget.ride),
               StopPointsCustom(screenWidth: screenWidth, ride: widget.ride),
               DetailsCard4(screenWidth: screenWidth, streamRiders: _streamRiders),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 20),
-                child: LargeButtonCustom(
-                    onTap: widget.user.uid == FirebaseAuth.instance.currentUser!.uid
-                        ? () {
-                            Navigator.push(
-                              context,
-                              UnanimatedRoute(builder: (context) => EditRideScreen(ride: widget.ride)),
-                            );
-                          }
-                        : () async {
-                            final res = await addRiderToThisRide(getLoggedUserReference(), widget.ride);
+              FutureBuilder(
+                  future: checkIfRiderIsInRide(getLoggedUserReference(), widget.ride),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    } else {
+                      bool isRiderInRide = snapshot.data ?? false;
+                      return Container(
+                        margin: const EdgeInsets.symmetric(vertical: 20),
+                        child: isRiderInRide
+                            ? LargeButtonCustom(
+                                onTap: () async {
+                                  final res = await removeUserFromRide(FirebaseAuth.instance.currentUser!.uid, widget.ride.id);
+                                  Fluttertoast.showToast(
+                                    msg: res == true ? "Uspješno ste uklonjeni!" : "Greška. Pokušajte ponovo.",
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    gravity: ToastGravity.BOTTOM,
+                                    backgroundColor: res == true ? const Color(0xFF528C9E) : const Color(0xFFA41723),
+                                    textColor: Colors.white,
+                                  );
+                                  if (res == true) {
+                                    setState(() {
+                                      isRiderInRide = false;
+                                    });
+                                  }
+                                },
+                                btnText: "Odustani od vožnje",
+                                isRed: true,
+                              )
+                            : LargeButtonCustom(
+                                onTap: widget.user.uid == FirebaseAuth.instance.currentUser!.uid
+                                    ? () {
+                                        Navigator.push(
+                                          context,
+                                          UnanimatedRoute(builder: (context) => EditRideScreen(ride: widget.ride)),
+                                        );
+                                      }
+                                    : () async {
+                                        final res = await addRiderToThisRide(getLoggedUserReference(), widget.ride);
 
-                            Fluttertoast.showToast(
-                              msg: res == true ? "Uspješno ste se pridružili!" : "Već ste se pridružili ovoj vožnji!",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              backgroundColor: res == true ? const Color(0xFF528C9E) : const Color(0xFFA41723),
-                              textColor: Colors.white,
-                            );
-                          },
-                    btnText: widget.user.uid == FirebaseAuth.instance.currentUser!.uid ? "Uredi vožnju" : "Pridruži se ovoj vožnji"),
-              )
+                                        Fluttertoast.showToast(
+                                          msg: res == true ? "Uspješno ste se pridružili!" : "Greška. Pokušajte ponovo.",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          backgroundColor: res == true ? const Color(0xFF528C9E) : const Color(0xFFA41723),
+                                          textColor: Colors.white,
+                                        );
+                                        if (res == true) {
+                                          setState(() {
+                                            isRiderInRide = true;
+                                          });
+                                        }
+                                      },
+                                btnText:
+                                    widget.user.uid == FirebaseAuth.instance.currentUser!.uid ? "Uredi vožnju" : "Pridruži se ovoj vožnji"),
+                      );
+                    }
+                  })
             ],
           ),
         ),

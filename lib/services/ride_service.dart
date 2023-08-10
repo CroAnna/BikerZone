@@ -1,5 +1,8 @@
+// ignore_for_file: avoid_print
+
 import 'package:bikerzone/models/ride.dart';
 import 'package:bikerzone/services/general_service.dart';
+import 'package:bikerzone/services/user_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -38,7 +41,6 @@ Future<String> addRide(
     });
     return rideRef.id;
   } catch (error) {
-    // ignore: avoid_print
     print('Error: $error');
     rethrow;
   }
@@ -98,8 +100,61 @@ Future<bool> updateRide(
     });
     return true;
   } catch (err) {
-    // ignore: avoid_print
     print("Error: $err");
+    return false;
+  }
+}
+
+Future<bool> checkIfRiderIsInRide(DocumentReference userRef, Ride ride) async {
+  final ridersSnapshot =
+      await FirebaseFirestore.instance.collection('rides').doc(ride.id).collection('riders').where('user_id', isEqualTo: userRef).get();
+
+  if (ridersSnapshot.docs.isEmpty) {
+    return false;
+  } else {
+    return true;
+  }
+}
+
+Future<bool> removeUserFromRide(String userId, String rideId) async {
+  DocumentReference userRef = getUserReferenceById(userId);
+  DocumentReference rideRef = getReferenceById(rideId, "rides");
+  print(userRef);
+  print(rideRef);
+  print(userId);
+  print(rideId);
+
+  try {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .collection('rides')
+        .where('ride_ref', isEqualTo: rideRef)
+        .get()
+        .then((QuerySnapshot snapshot) {
+      for (var doc in snapshot.docs) {
+        print("prc");
+        print(doc);
+        doc.reference.delete();
+      }
+    });
+
+    await FirebaseFirestore.instance
+        .collection('rides')
+        .doc(rideId)
+        .collection('riders')
+        .where('user_id', isEqualTo: userRef)
+        .get()
+        .then((QuerySnapshot snapshot) {
+      for (var doc in snapshot.docs) {
+        print("prc");
+        print(doc);
+        doc.reference.delete();
+      }
+    });
+    return true;
+  } catch (err) {
+    print('Error $err');
     return false;
   }
 }
