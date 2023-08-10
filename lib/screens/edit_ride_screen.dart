@@ -114,8 +114,21 @@ class _EditRideScreenState extends State<EditRideScreen> {
                 rightIcon: Icons.delete,
                 isLight: true,
                 isSmall: true,
-                rightOnTap: () {
-                  deleteRide(widget.ride.id);
+                rightOnTap: () async {
+                  final res = await deleteRide(widget.ride.id);
+                  if (res == true) {
+                    // ignore: use_build_context_synchronously
+                    Navigator.pop(context);
+                    // ignore: use_build_context_synchronously
+                    Navigator.pop(context);
+                  }
+                  Fluttertoast.showToast(
+                    msg: res == true ? "Uspješno izbrisana vožnja." : "Došlo je do greške. Pokušajte ponovo.",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    backgroundColor: res == true ? const Color(0xFF528C9E) : const Color(0xFFA41723),
+                    textColor: Colors.white,
+                  );
                 },
               ),
               InputFieldCustom(
