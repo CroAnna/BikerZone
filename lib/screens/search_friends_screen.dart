@@ -4,6 +4,7 @@ import 'package:bikerzone/widgets/search_bar_custom.dart';
 import 'package:bikerzone/widgets/top_navigation_custom.dart';
 import 'package:bikerzone/widgets/user_card_custom.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -62,22 +63,24 @@ class _SearchFriendsScreenState extends State<SearchFriendsScreen> {
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
                               UserC user = UserC.fromDocument(snapshot.data!.docs[index]);
-                              return UserCardCustom(
-                                user: user,
-                                icon: Icons.person_add,
-                                color: const Color(0xFF0276B4),
-                                iconColor: const Color(0xFFEAEAEA),
-                                onTap: () async {
-                                  final res = await addFriend(user.uid);
-                                  Fluttertoast.showToast(
-                                    msg: res == true ? "Dodan za prijatelja!" : "Pogreška.",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    backgroundColor: res == true ? const Color(0xFF528C9E) : const Color(0xFFA41723),
-                                    textColor: Colors.white,
-                                  );
-                                },
-                              );
+                              return user.uid != FirebaseAuth.instance.currentUser!.uid
+                                  ? (UserCardCustom(
+                                      user: user,
+                                      icon: Icons.person_add,
+                                      color: const Color(0xFF0276B4),
+                                      iconColor: const Color(0xFFEAEAEA),
+                                      onTap: () async {
+                                        final res = await addFriend(user.uid);
+                                        Fluttertoast.showToast(
+                                          msg: res == true ? "Dodan za prijatelja!" : "Pogreška.",
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
+                                          backgroundColor: res == true ? const Color(0xFF528C9E) : const Color(0xFFA41723),
+                                          textColor: Colors.white,
+                                        );
+                                      },
+                                    ))
+                                  : const SizedBox(height: 0);
                             },
                           ),
                         )
