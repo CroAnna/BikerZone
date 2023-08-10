@@ -158,3 +158,47 @@ Future<bool> removeUserFromRide(String userId, String rideId) async {
     return false;
   }
 }
+
+Future<bool> deleteRide(String rideId) async {
+  DocumentReference rideRef = getReferenceById(rideId, "rides");
+  List<QueryDocumentSnapshot> allRiders = [];
+
+  try {
+    QuerySnapshot ridersSnapshot = await FirebaseFirestore.instance.collection('rides').doc(rideId).collection('riders').get();
+    allRiders = ridersSnapshot.docs;
+
+    for (QueryDocumentSnapshot doc in allRiders) {
+      DocumentReference userRef = doc.get('user_id');
+      print(userRef);
+
+      DocumentSnapshot userSnapshot = await userRef.get();
+      if (userSnapshot.exists) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userSnapshot.get('uid'))
+            .collection('rides')
+            .where('ride_ref', isEqualTo: rideRef)
+            .get()
+            .then((QuerySnapshot snapshot) {
+          for (var doc in snapshot.docs) {
+            print("prc");
+            print(doc);
+            doc.reference.delete();
+          }
+        });
+      }
+    }
+
+    await FirebaseFirestore.instance.collection('rides').doc(rideId).collection('riders').get().then((snapshot) {
+      for (DocumentSnapshot doc in snapshot.docs) {
+        doc.reference.delete();
+      }
+    });
+    await rideRef.delete();
+
+    return true;
+  } catch (err) {
+    print('Error $err');
+    return false;
+  }
+}

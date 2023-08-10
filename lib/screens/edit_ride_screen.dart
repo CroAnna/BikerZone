@@ -115,7 +115,7 @@ class _EditRideScreenState extends State<EditRideScreen> {
                 isLight: true,
                 isSmall: true,
                 rightOnTap: () {
-                  // TODO delete ride from db and riders
+                  deleteRide(widget.ride.id);
                 },
               ),
               InputFieldCustom(
