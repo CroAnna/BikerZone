@@ -136,41 +136,41 @@ class _OfferOverviewCustomState extends State<OfferOverviewCustom> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          widget.isFilterShown
-              ? Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: GestureDetector(
-                    onTap: () => {
-                      setState(() {
+          Padding(
+            padding: const EdgeInsets.only(left: 20),
+            child: GestureDetector(
+              onTap: () => {
+                widget.isFilterShown
+                    ? setState(() {
                         widget.onClearFilters("", "");
                       })
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.circular(10)),
-                        color: const Color(0xFF394949),
-                        boxShadow: [
+                    : null
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  color: const Color(0xFF394949),
+                  boxShadow: widget.isFilterShown
+                      ? [
                           BoxShadow(
                             color: Colors.black.withOpacity(0.8),
                             blurRadius: 4,
                             offset: const Offset(0, 0),
                           )
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Icon(
-                          widget.isFilterShown ? Icons.delete_forever : null,
-                          color: const Color(0xFFEAEAEA),
-                          size: 35,
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              : Container(
-                  width: 65,
+                        ]
+                      : null,
                 ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(
+                    widget.isFilterShown ? Icons.delete_forever : null,
+                    color: const Color(0xFFEAEAEA),
+                    size: 35,
+                  ),
+                ),
+              ),
+            ),
+          ),
           const Text(
             "Istražite ponudu",
             style: TextStyle(
