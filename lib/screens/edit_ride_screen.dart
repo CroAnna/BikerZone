@@ -299,7 +299,7 @@ class _EditRideScreenState extends State<EditRideScreen> {
                 controller: nmbrOfPeopleController,
                 hintText: "npr. 10 ili ostavi prazno",
                 hide: false,
-                labelText: "Maksimalan broj ljudi (opcionalno):",
+                labelText: "Maksimalan broj ljudi (0 = bez ograničenja):",
               ),
               InputFieldCustom(
                 isTextarea: true,
@@ -307,21 +307,24 @@ class _EditRideScreenState extends State<EditRideScreen> {
                 hintText: "npr. što očekivati od vožnje",
                 labelText: "Poruka organizatora: (opcionalno):",
               ),
-              LargeButtonCustom(
-                  onTap: areFieldsEmpty()
-                      ? () {
-                          Fluttertoast.showToast(
-                            msg: "Ispunite sva obavezna polja!",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            backgroundColor: const Color(0xFFA41723),
-                            textColor: Colors.white,
-                          );
-                        }
-                      : () {
-                          update();
-                        },
-                  btnText: "Spremi promjene"),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 15, top: 5),
+                child: LargeButtonCustom(
+                    onTap: areFieldsEmpty()
+                        ? () {
+                            Fluttertoast.showToast(
+                              msg: "Ispunite sva obavezna polja!",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              backgroundColor: const Color(0xFFA41723),
+                              textColor: Colors.white,
+                            );
+                          }
+                        : () {
+                            update();
+                          },
+                    btnText: "Spremi promjene"),
+              ),
             ],
           ),
         ),

@@ -23,7 +23,7 @@ class _FindRideScreenState extends State<FindRideScreen> {
   @override
   void initState() {
     super.initState();
-    _streamRides = _referenceRides.snapshots();
+    _streamRides = _referenceRides.orderBy('start_d_a_t').snapshots();
   }
 
   void _handleDataRecieved(bool filter) {
@@ -37,13 +37,29 @@ class _FindRideScreenState extends State<FindRideScreen> {
       startLocation = start;
       finishLocation = finish;
       if (start != "" && finish != "") {
-        _streamRides = _referenceRides.where('starting_point', isEqualTo: start).where('finishing_point', isEqualTo: finish).snapshots();
+        try {
+          _streamRides = _referenceRides
+              .where('starting_point', isEqualTo: start)
+              .where('finishing_point', isEqualTo: finish)
+              .orderBy('start_d_a_t')
+              .snapshots();
+        } catch (err) {
+          print(err);
+        }
       } else if (start != "") {
-        _streamRides = _referenceRides.where('starting_point', isEqualTo: start).snapshots();
+        try {
+          _streamRides = _referenceRides.orderBy('start_d_a_t').where('starting_point', isEqualTo: start).snapshots();
+        } catch (err) {
+          print(err);
+        }
       } else if (finish != "") {
-        _streamRides = _referenceRides.where('finishing_point', isEqualTo: finish).snapshots();
+        try {
+          _streamRides = _referenceRides.where('finishing_point', isEqualTo: finish).orderBy('start_d_a_t').snapshots();
+        } catch (err) {
+          print(err);
+        }
       } else {
-        _streamRides = _referenceRides.snapshots();
+        _streamRides = _referenceRides.orderBy('start_d_a_t').snapshots();
       }
       _handleDataRecieved(false);
     });
@@ -70,7 +86,7 @@ class _FindRideScreenState extends State<FindRideScreen> {
                 }
 
                 if (!snapshot.hasData) {
-                  return const Text('Loading...');
+                  return const CircularProgressIndicator();
                 }
 
                 final rides = snapshot.data!.docs.map((doc) {
@@ -78,22 +94,22 @@ class _FindRideScreenState extends State<FindRideScreen> {
                 }).toList();
 
                 if (rides.isEmpty) {
-                  return SizedBox(
-                      height: 400,
-                      child: Column(
-                        children: [
-                          const ErrorMessageCustom(text: "Nema vožnji."),
-                          GestureDetector(
-                              onTap: () => {_handleFilterData("", "")},
-                              child: const Padding(
-                                padding: EdgeInsets.all(15),
-                                child: Text(
-                                  "Očisti filter.",
-                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF444444)),
-                                ),
-                              ))
-                        ],
-                      ));
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        const ErrorMessageCustom(text: "Nema vožnji."),
+                        GestureDetector(
+                            onTap: () => {_handleFilterData("", "")},
+                            child: const Padding(
+                              padding: EdgeInsets.all(15),
+                              child: Text(
+                                "Očisti filter.",
+                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF444444)),
+                              ),
+                            ))
+                      ],
+                    ),
+                  );
                 } else {
                   return Expanded(
                     child: ListView.builder(
@@ -108,9 +124,7 @@ class _FindRideScreenState extends State<FindRideScreen> {
                           ),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
-                              return const SizedBox(
-                                width: 0,
-                              );
+                              return const CircularProgressIndicator();
                             }
                             if (snapshot.hasData) {
                               final data = snapshot.data!;

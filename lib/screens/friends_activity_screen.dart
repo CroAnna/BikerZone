@@ -167,7 +167,7 @@ class _FriendsActivityScreenState extends State<FriendsActivityScreen> {
                                                                       )
                                                                     },
                                                                 child: FriendsRideCardCustom(ride: rideObject));
-                                                          }); // TODO show it if isn't finished
+                                                          });
                                                     } else {
                                                       return const Text('User not found');
                                                     }

@@ -294,47 +294,50 @@ class _AddRideScreenState extends State<AddRideScreen> {
                 ),
               ),
             ),
-            LargeButtonCustom(
-                onTap: areFieldsEmpty()
-                    ? () {
-                        Fluttertoast.showToast(
-                          msg: "Ispunite sva obavezna polja!",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                          backgroundColor: const Color(0xFFA41723),
-                          textColor: Colors.white,
-                        );
-                      }
-                    : () async {
-                        String id = await addRide(
-                          startingCityController.text,
-                          exactStartingPointController.text,
-                          finishingCityController.text,
-                          startingDaTController,
-                          finishingDaTController,
-                          highway == "da" ? true : false,
-                          dropdownBikeValue,
-                          dropdownPaceValue,
-                          nmbrOfPeopleController.text.isEmpty ? 0 : int.parse(nmbrOfPeopleController.text),
-                          organizersMessageController.text,
-                          stopPoints,
-                        );
-                        setState(() {
-                          rideId = id;
-                        });
-                        await addRiderToThisRide(getLoggedUserReference(), id);
-                        Fluttertoast.showToast(
-                          msg: id.isNotEmpty ? "Vožnja je uspješno objavljena!" : "Došlo je do greške. Pokušajte ponovo.",
-                          toastLength: Toast.LENGTH_SHORT,
-                          gravity: ToastGravity.BOTTOM,
-                          backgroundColor: id.isNotEmpty ? const Color(0xFF528C9E) : const Color(0xFFA41723),
-                          textColor: Colors.white,
-                        );
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: LargeButtonCustom(
+                  onTap: areFieldsEmpty()
+                      ? () {
+                          Fluttertoast.showToast(
+                            msg: "Ispunite sva obavezna polja!",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: const Color(0xFFA41723),
+                            textColor: Colors.white,
+                          );
+                        }
+                      : () async {
+                          String id = await addRide(
+                            startingCityController.text,
+                            exactStartingPointController.text,
+                            finishingCityController.text,
+                            startingDaTController,
+                            finishingDaTController,
+                            highway == "da" ? true : false,
+                            dropdownBikeValue,
+                            dropdownPaceValue,
+                            nmbrOfPeopleController.text.isEmpty ? 0 : int.parse(nmbrOfPeopleController.text),
+                            organizersMessageController.text,
+                            stopPoints,
+                          );
+                          setState(() {
+                            rideId = id;
+                          });
+                          await addRiderToThisRide(getLoggedUserReference(), id);
+                          Fluttertoast.showToast(
+                            msg: id.isNotEmpty ? "Vožnja je uspješno objavljena!" : "Došlo je do greške. Pokušajte ponovo.",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            backgroundColor: id.isNotEmpty ? const Color(0xFF528C9E) : const Color(0xFFA41723),
+                            textColor: Colors.white,
+                          );
 
-                        // ignore: use_build_context_synchronously
-                        Navigator.pop(context);
-                      },
-                btnText: "Objavi grupnu vožnju")
+                          // ignore: use_build_context_synchronously
+                          Navigator.pop(context);
+                        },
+                  btnText: "Objavi grupnu vožnju"),
+            )
           ],
         ),
       )),

@@ -154,11 +154,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               hide: false,
             ),
             const SizedBox(height: 20),
-            LargeButtonCustom(
-                onTap: () {
-                  update();
-                },
-                btnText: "Spremi promjene")
+            Padding(
+              padding: const EdgeInsets.only(bottom: 20),
+              child: LargeButtonCustom(
+                  onTap: () {
+                    update();
+                  },
+                  btnText: "Spremi promjene"),
+            )
           ],
         ),
       )),
