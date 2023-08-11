@@ -20,18 +20,26 @@ class _SearchFriendsScreenState extends State<SearchFriendsScreen> {
   String usernameText = '';
 
   initSearchFromTheBeginning(String text) {
-    // only get usernames that start with value from the textfield input and that letters are in that order
-    String endText = text.substring(0, text.length - 1) + String.fromCharCode(text.codeUnitAt(text.length - 1) + 1);
+    if (text != '') {
+      text = text.toLowerCase();
 
-    usersList = FirebaseFirestore.instance
-        .collection("users")
-        .where("username", isGreaterThanOrEqualTo: text)
-        .where("username", isLessThan: endText)
-        .get();
+      // only get usernames that start with value from the textfield input and that letters are in that order
+      String endText = text.substring(0, text.length - 1) + String.fromCharCode(text.codeUnitAt(text.length - 1) + 1);
 
-    setState(() {
-      usersList;
-    });
+      usersList = FirebaseFirestore.instance
+          .collection("users")
+          .where("username", isGreaterThanOrEqualTo: text)
+          .where("username", isLessThan: endText)
+          .get();
+
+      setState(() {
+        usersList;
+      });
+    } else {
+      setState(() {
+        usersList = null;
+      });
+    }
   }
 
   @override
@@ -53,75 +61,78 @@ class _SearchFriendsScreenState extends State<SearchFriendsScreen> {
                 padding: const EdgeInsets.all(20),
                 child: SearchBarCustom(inputText: usernameText, initSearch: initSearchFromTheBeginning),
               ),
-              FutureBuilder(
-                future: usersList,
-                builder: (context, AsyncSnapshot snapshot) {
-                  return snapshot.hasData
-                      ? SizedBox(
-                          height: 200,
-                          child: ListView.builder(
-                            itemCount: snapshot.data!.docs.length,
-                            itemBuilder: (context, index) {
-                              UserC friend = UserC.fromDocument(snapshot.data!.docs[index]);
-                              return friend.uid != FirebaseAuth.instance.currentUser!.uid
-                                  ? FutureBuilder(
-                                      future: checkIfIsFriend(getUserReferenceById(friend.uid), FirebaseAuth.instance.currentUser!.uid),
-                                      builder: (context, snapshot) {
-                                        if (snapshot.hasError) {
-                                          return Center(child: Text('Error: ${snapshot.error}'));
-                                        }
+              Visibility(
+                visible: usersList != null,
+                child: FutureBuilder(
+                  future: usersList,
+                  builder: (context, AsyncSnapshot snapshot) {
+                    return snapshot.hasData
+                        ? SizedBox(
+                            height: 200,
+                            child: ListView.builder(
+                              itemCount: snapshot.data!.docs.length,
+                              itemBuilder: (context, index) {
+                                UserC friend = UserC.fromDocument(snapshot.data!.docs[index]);
+                                return friend.uid != FirebaseAuth.instance.currentUser!.uid
+                                    ? FutureBuilder(
+                                        future: checkIfIsFriend(getUserReferenceById(friend.uid), FirebaseAuth.instance.currentUser!.uid),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasError) {
+                                            return Center(child: Text('Error: ${snapshot.error}'));
+                                          }
 
-                                        if (!snapshot.hasData) {
-                                          return const Text('Loading...');
-                                        }
-                                        bool isFriend = snapshot.data ?? false;
-                                        return (UserCardCustom(
-                                          user: friend,
-                                          icon: isFriend ? Icons.person_remove : Icons.person_add,
-                                          color: isFriend ? const Color(0xFFA41723) : const Color(0xFF0276B4),
-                                          iconColor: const Color(0xFFEAEAEA),
-                                          onTap: () async {
-                                            if (isFriend == true) {
-                                              final res = await removeFriend(friend.uid);
-                                              Fluttertoast.showToast(
-                                                msg: res == true ? "Uklonjen iz prijatelja!" : "Pogreška.",
-                                                toastLength: Toast.LENGTH_SHORT,
-                                                gravity: ToastGravity.BOTTOM,
-                                                backgroundColor: res == true ? const Color(0xFF528C9E) : const Color(0xFFA41723),
-                                                textColor: Colors.white,
-                                              );
-                                              if (res == true) {
-                                                setState(() {
-                                                  isFriend = false;
-                                                });
+                                          if (!snapshot.hasData) {
+                                            return const Text('Loading...');
+                                          }
+                                          bool isFriend = snapshot.data ?? false;
+                                          return (UserCardCustom(
+                                            user: friend,
+                                            icon: isFriend ? Icons.person_remove : Icons.person_add,
+                                            color: isFriend ? const Color(0xFFA41723) : const Color(0xFF0276B4),
+                                            iconColor: const Color(0xFFEAEAEA),
+                                            onTap: () async {
+                                              if (isFriend == true) {
+                                                final res = await removeFriend(friend.uid);
+                                                Fluttertoast.showToast(
+                                                  msg: res == true ? "Uklonjen iz prijatelja!" : "Pogreška.",
+                                                  toastLength: Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  backgroundColor: res == true ? const Color(0xFF528C9E) : const Color(0xFFA41723),
+                                                  textColor: Colors.white,
+                                                );
+                                                if (res == true) {
+                                                  setState(() {
+                                                    isFriend = false;
+                                                  });
+                                                }
+                                              } else {
+                                                final res = await addFriend(friend.uid);
+                                                Fluttertoast.showToast(
+                                                  msg: res == true ? "Dodan za prijatelja!" : "Pogreška.",
+                                                  toastLength: Toast.LENGTH_SHORT,
+                                                  gravity: ToastGravity.BOTTOM,
+                                                  backgroundColor: res == true ? const Color(0xFF528C9E) : const Color(0xFFA41723),
+                                                  textColor: Colors.white,
+                                                );
+                                                if (res == true) {
+                                                  setState(() {
+                                                    isFriend = true;
+                                                  });
+                                                }
                                               }
-                                            } else {
-                                              final res = await addFriend(friend.uid);
-                                              Fluttertoast.showToast(
-                                                msg: res == true ? "Dodan za prijatelja!" : "Pogreška.",
-                                                toastLength: Toast.LENGTH_SHORT,
-                                                gravity: ToastGravity.BOTTOM,
-                                                backgroundColor: res == true ? const Color(0xFF528C9E) : const Color(0xFFA41723),
-                                                textColor: Colors.white,
-                                              );
-                                              if (res == true) {
-                                                setState(() {
-                                                  isFriend = true;
-                                                });
-                                              }
-                                            }
-                                          },
-                                        ));
-                                      },
-                                    )
-                                  : const SizedBox(height: 0);
-                            },
-                          ),
-                        )
-                      : const SizedBox(
-                          width: 0,
-                        );
-                },
+                                            },
+                                          ));
+                                        },
+                                      )
+                                    : const SizedBox(height: 0);
+                              },
+                            ),
+                          )
+                        : const SizedBox(
+                            width: 0,
+                          );
+                  },
+                ),
               )
             ],
           ),

@@ -9,7 +9,7 @@ Future addUserDetails(String fullname, String username, String email, DateTime b
   try {
     await FirebaseFirestore.instance.collection('users').doc(uid).set({
       "fullname": fullname,
-      "username": username,
+      "username": username.toLowerCase(),
       "email": email,
       "uid": uid,
       "image_url": "",
@@ -118,7 +118,7 @@ Future<bool> updateUser(
   final userReference = getLoggedUserReference();
   try {
     await userReference.update({
-      'username': usernameController.text,
+      'username': usernameController.text.toString().toLowerCase(),
       'fullname': fullnameController.text,
       'description': descriptionController.text,
       'birthday': birthdayController,
