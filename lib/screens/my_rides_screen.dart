@@ -1,6 +1,7 @@
 import 'package:bikerzone/models/ride.dart';
 import 'package:bikerzone/models/user.dart';
 import 'package:bikerzone/services/general_service.dart';
+import 'package:bikerzone/widgets/error_message_custom.dart';
 import 'package:bikerzone/widgets/ride_card_custom.dart';
 import 'package:bikerzone/widgets/top_navigation_custom.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -37,24 +38,25 @@ class _MyRidesScreenState extends State<MyRidesScreen> {
             rightIcon: null,
             isSmall: true,
           ),
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-                stream: _streamRides,
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Text(snapshot.error.toString());
-                  }
-                  if (!snapshot.hasData) {
-                    return const CircularProgressIndicator();
-                  }
+          StreamBuilder<QuerySnapshot>(
+              stream: _streamRides,
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Text(snapshot.error.toString());
+                }
+                if (!snapshot.hasData) {
+                  return const CircularProgressIndicator();
+                }
 
-                  final rides = snapshot.data!.docs;
+                final rides = snapshot.data!.docs;
 
-                  return rides.isEmpty
-                      ? const Center(
-                          child: Text("Još nemate vožnji :("),
-                        )
-                      : ListView.builder(
+                return rides.isEmpty
+                    ? const SizedBox(
+                        height: 200,
+                        child: ErrorMessageCustom(text: "Nemate aktivnih vožnji."),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
                           itemCount: rides.length,
                           itemBuilder: (context, index) {
                             final ride = rides[index];
@@ -95,9 +97,9 @@ class _MyRidesScreenState extends State<MyRidesScreen> {
                                   }
                                 });
                           },
-                        );
-                }),
-          )
+                        ),
+                      );
+              })
         ],
       )),
     );

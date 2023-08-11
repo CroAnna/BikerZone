@@ -1,6 +1,7 @@
 import 'package:bikerzone/models/ride.dart';
 import 'package:bikerzone/models/user.dart';
 import 'package:bikerzone/services/general_service.dart';
+import 'package:bikerzone/widgets/error_message_custom.dart';
 import 'package:bikerzone/widgets/filter_dropdown_custom.dart';
 import 'package:bikerzone/widgets/ride_card_custom.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -44,7 +45,6 @@ class _FindRideScreenState extends State<FindRideScreen> {
       } else {
         _streamRides = _referenceRides.snapshots();
       }
-      print("$startLocation$finishLocation$startLocation$finishLocation");
       _handleDataRecieved(false);
     });
   }
@@ -62,52 +62,71 @@ class _FindRideScreenState extends State<FindRideScreen> {
               visible: isFilterShown,
               child: FilterDropdownCustom(onSearchClicked: _handleFilterData),
             ),
-            Expanded(
-              child: StreamBuilder(
-                stream: _streamRides,
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  }
+            StreamBuilder(
+              stream: _streamRides,
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
 
-                  if (!snapshot.hasData) {
-                    return const Text('Loading...');
-                  }
+                if (!snapshot.hasData) {
+                  return const Text('Loading...');
+                }
 
-                  final rides = snapshot.data!.docs.map((doc) {
-                    return Ride.fromDocument(doc);
-                  }).toList();
+                final rides = snapshot.data!.docs.map((doc) {
+                  return Ride.fromDocument(doc);
+                }).toList();
 
-                  return ListView.builder(
-                    itemCount: rides.length,
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return FutureBuilder(
-                        future: getDocumentByIdEveryType(
-                          "users",
-                          rides[index].userId,
-                          (snapshot) => UserC.fromDocument(snapshot),
-                        ),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return const SizedBox(
-                              width: 0,
-                            );
-                          }
-                          if (snapshot.hasData) {
-                            final data = snapshot.data!;
-                            return RideCardCustom(ride: rides[index], user: data);
-                          } else {
-                            return const SizedBox(
-                              width: 0,
-                            );
-                          }
-                        },
-                      );
-                    },
+                if (rides.isEmpty) {
+                  return SizedBox(
+                      height: 400,
+                      child: Column(
+                        children: [
+                          const ErrorMessageCustom(text: "Nema vožnji."),
+                          GestureDetector(
+                              onTap: () => {_handleFilterData("", "")},
+                              child: const Padding(
+                                padding: EdgeInsets.all(15),
+                                child: Text(
+                                  "Očisti filter.",
+                                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, color: Color(0xFF444444)),
+                                ),
+                              ))
+                        ],
+                      ));
+                } else {
+                  return Expanded(
+                    child: ListView.builder(
+                      itemCount: rides.length,
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        return FutureBuilder(
+                          future: getDocumentByIdEveryType(
+                            "users",
+                            rides[index].userId,
+                            (snapshot) => UserC.fromDocument(snapshot),
+                          ),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return const SizedBox(
+                                width: 0,
+                              );
+                            }
+                            if (snapshot.hasData) {
+                              final data = snapshot.data!;
+                              return RideCardCustom(ride: rides[index], user: data);
+                            } else {
+                              return const SizedBox(
+                                width: 0,
+                              );
+                            }
+                          },
+                        );
+                      },
+                    ),
                   );
-                },
-              ),
+                }
+              },
             ),
           ],
         ),

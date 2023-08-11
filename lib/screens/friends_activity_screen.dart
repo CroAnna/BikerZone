@@ -4,6 +4,7 @@ import 'package:bikerzone/screens/friends_profile_screen.dart';
 import 'package:bikerzone/screens/ride_details_screen.dart';
 import 'package:bikerzone/screens/search_friends_screen.dart';
 import 'package:bikerzone/services/user_service.dart';
+import 'package:bikerzone/widgets/error_message_custom.dart';
 import 'package:bikerzone/widgets/friends_ride_card_custom.dart';
 import 'package:bikerzone/widgets/top_navigation_custom.dart';
 import 'package:bikerzone/widgets/unanimated_route.dart';
@@ -63,9 +64,7 @@ class _FriendsActivityScreenState extends State<FriendsActivityScreen> {
                   final friends = snapshot.data!.docs;
 
                   return friends.isEmpty
-                      ? const Center(
-                          child: Text("Nemate prijatelja."),
-                        )
+                      ? const ErrorMessageCustom(text: "Dodajte prijatelje.")
                       : ListView.builder(
                           shrinkWrap: true,
                           itemCount: friends.length,

@@ -1,6 +1,7 @@
 import 'package:bikerzone/models/user.dart';
 import 'package:bikerzone/screens/search_friends_screen.dart';
 import 'package:bikerzone/services/user_service.dart';
+import 'package:bikerzone/widgets/error_message_custom.dart';
 import 'package:bikerzone/widgets/top_navigation_custom.dart';
 import 'package:bikerzone/widgets/unanimated_route.dart';
 import 'package:bikerzone/widgets/user_card_custom.dart';
@@ -61,9 +62,7 @@ class _FriendListScreenState extends State<FriendListScreen> {
                   return SizedBox(
                     height: friends.length * 91,
                     child: friends.isEmpty
-                        ? const Center(
-                            child: Text("Nemate prijatelja."),
-                          )
+                        ? const ErrorMessageCustom(text: "Dodajte prijatelje.")
                         : ListView.builder(
                             itemCount: friends.length,
                             physics: const NeverScrollableScrollPhysics(),

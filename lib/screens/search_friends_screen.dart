@@ -82,7 +82,7 @@ class _SearchFriendsScreenState extends State<SearchFriendsScreen> {
                                         }
 
                                         if (!snapshot.hasData) {
-                                          return const Text('Loading...');
+                                          return const Center(child: Text('Loading...'));
                                         }
                                         bool isFriend = snapshot.data ?? false;
                                         return (UserCardCustom(
