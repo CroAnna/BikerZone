@@ -361,9 +361,12 @@ class DetailsCard3 extends StatelessWidget {
       {"icon": Icons.add_road, "text": ride.highway ? "Putujemo autocestom" : "Ne putujemo autocestom"},
       {
         "icon": Icons.two_wheeler,
-        "text": ride.acceptType == "Svi motori" ? "Prihvaćamo sve tipove motora" : "Preferiramo tip ${ride.acceptType}"
+        "text": ride.acceptType == "-" ? "Prihvaćamo sve tipove motora" : "Preferiramo tip: ${ride.acceptType.toLowerCase()}"
       },
-      {"icon": Icons.people_alt, "text": "Max broj ljudi u grupi: ${ride.maxPeople}"},
+      {
+        "icon": Icons.people_alt,
+        "text": ride.maxPeople == 0 ? "Nema ograničenja broja ljudi" : "Max broj ljudi u grupi: ${ride.maxPeople}"
+      },
       {"icon": Icons.speed, "text": ride.pace},
     ];
     return Container(
