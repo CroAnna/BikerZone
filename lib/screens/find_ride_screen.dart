@@ -41,6 +41,8 @@ class _FindRideScreenState extends State<FindRideScreen> {
         _streamRides = _referenceRides.where('starting_point', isEqualTo: start).snapshots();
       } else if (finish != "") {
         _streamRides = _referenceRides.where('finishing_point', isEqualTo: finish).snapshots();
+      } else {
+        _streamRides = _referenceRides.snapshots();
       }
       print("$startLocation$finishLocation$startLocation$finishLocation");
       _handleDataRecieved(false);
@@ -55,7 +57,7 @@ class _FindRideScreenState extends State<FindRideScreen> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            OfferOverviewCustom(isFilterShown: isFilterShown, onDataRecieved: _handleDataRecieved),
+            OfferOverviewCustom(isFilterShown: isFilterShown, onDataRecieved: _handleDataRecieved, onClearFilters: _handleFilterData),
             Visibility(
               visible: isFilterShown,
               child: FilterDropdownCustom(onSearchClicked: _handleFilterData),
@@ -116,9 +118,10 @@ class _FindRideScreenState extends State<FindRideScreen> {
 
 // ignore: must_be_immutable
 class OfferOverviewCustom extends StatefulWidget {
-  OfferOverviewCustom({super.key, required this.isFilterShown, required this.onDataRecieved});
+  OfferOverviewCustom({super.key, required this.isFilterShown, required this.onDataRecieved, required this.onClearFilters});
   bool isFilterShown;
   final void Function(bool) onDataRecieved;
+  final void Function(String, String) onClearFilters;
 
   @override
   State<OfferOverviewCustom> createState() => _OfferOverviewCustomState();
@@ -133,9 +136,41 @@ class _OfferOverviewCustomState extends State<OfferOverviewCustom> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            width: 65,
-          ),
+          widget.isFilterShown
+              ? Padding(
+                  padding: const EdgeInsets.only(left: 20),
+                  child: GestureDetector(
+                    onTap: () => {
+                      setState(() {
+                        widget.onClearFilters("", "");
+                      })
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(Radius.circular(10)),
+                        color: const Color(0xFF394949),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.8),
+                            blurRadius: 4,
+                            offset: const Offset(0, 0),
+                          )
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          widget.isFilterShown ? Icons.delete_forever : null,
+                          color: const Color(0xFFEAEAEA),
+                          size: 35,
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              : Container(
+                  width: 65,
+                ),
           const Text(
             "Istražite ponudu",
             style: TextStyle(
@@ -145,7 +180,7 @@ class _OfferOverviewCustomState extends State<OfferOverviewCustom> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(right: 15),
+            padding: const EdgeInsets.only(right: 20),
             child: GestureDetector(
               onTap: () => {
                 setState(() {
