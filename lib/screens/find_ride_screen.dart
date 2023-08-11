@@ -37,27 +37,15 @@ class _FindRideScreenState extends State<FindRideScreen> {
       startLocation = start;
       finishLocation = finish;
       if (start != "" && finish != "") {
-        try {
-          _streamRides = _referenceRides
-              .where('starting_point', isEqualTo: start)
-              .where('finishing_point', isEqualTo: finish)
-              .orderBy('start_d_a_t')
-              .snapshots();
-        } catch (err) {
-          print(err);
-        }
+        _streamRides = _referenceRides
+            .where('starting_point', isEqualTo: start)
+            .where('finishing_point', isEqualTo: finish)
+            .orderBy('start_d_a_t')
+            .snapshots();
       } else if (start != "") {
-        try {
-          _streamRides = _referenceRides.orderBy('start_d_a_t').where('starting_point', isEqualTo: start).snapshots();
-        } catch (err) {
-          print(err);
-        }
+        _streamRides = _referenceRides.orderBy('start_d_a_t').where('starting_point', isEqualTo: start).snapshots();
       } else if (finish != "") {
-        try {
-          _streamRides = _referenceRides.where('finishing_point', isEqualTo: finish).orderBy('start_d_a_t').snapshots();
-        } catch (err) {
-          print(err);
-        }
+        _streamRides = _referenceRides.where('finishing_point', isEqualTo: finish).orderBy('start_d_a_t').snapshots();
       } else {
         _streamRides = _referenceRides.orderBy('start_d_a_t').snapshots();
       }

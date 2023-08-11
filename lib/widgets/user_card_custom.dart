@@ -65,6 +65,10 @@ class UserCardCustom extends StatelessWidget {
                                 color: Color(0xFF0276B4),
                               ),
                               const SizedBox(width: 5),
+                              Text(user.bike.manufacturer.length > 10
+                                  ? "${user.bike.manufacturer.substring(0, 10)}."
+                                  : user.bike.manufacturer),
+                              const SizedBox(width: 5),
                               Text(user.bike.model),
                             ],
                           )
