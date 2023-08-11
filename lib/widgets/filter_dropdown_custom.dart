@@ -1,9 +1,15 @@
 import 'package:bikerzone/widgets/input_field_custom.dart';
 import 'package:flutter/material.dart';
 
-class FilterDropdownCustom extends StatelessWidget {
-  const FilterDropdownCustom({super.key});
+class FilterDropdownCustom extends StatefulWidget {
+  const FilterDropdownCustom({super.key, required this.onSearchClicked});
+  final void Function(String, String) onSearchClicked;
 
+  @override
+  State<FilterDropdownCustom> createState() => _FilterDropdownCustomState();
+}
+
+class _FilterDropdownCustomState extends State<FilterDropdownCustom> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -32,22 +38,20 @@ class FilterDropdownCustom extends StatelessWidget {
               ),
             ),
           ),
-          InputFieldCustom(
-              controller: startingLocationController,
-              hintText: "Start",
-              hide: false),
+          InputFieldCustom(controller: startingLocationController, hintText: "Start", hide: false),
           const Center(
             child: Icon(
               Icons.south,
               color: Color(0xFFEAEAEA),
             ),
           ),
-          InputFieldCustom(
-              controller: finishingLocationController,
-              hintText: "Kraj",
-              hide: false),
+          InputFieldCustom(controller: finishingLocationController, hintText: "Kraj", hide: false),
           GestureDetector(
-            onTap: () => {},
+            onTap: () => {
+              setState(() {
+                widget.onSearchClicked(startingLocationController.text, finishingLocationController.text);
+              })
+            },
             child: Container(
               margin: const EdgeInsets.only(top: 15),
               alignment: Alignment.center,

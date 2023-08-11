@@ -16,6 +16,8 @@ class _FindRideScreenState extends State<FindRideScreen> {
   bool isFilterShown = false;
   final CollectionReference _referenceRides = FirebaseFirestore.instance.collection('rides');
   late Stream<QuerySnapshot> _streamRides;
+  String? startLocation;
+  String? finishLocation;
 
   @override
   void initState() {
@@ -26,6 +28,22 @@ class _FindRideScreenState extends State<FindRideScreen> {
   void _handleDataRecieved(bool filter) {
     setState(() {
       isFilterShown = filter;
+    });
+  }
+
+  void _handleFilterData(String start, String finish) {
+    setState(() {
+      startLocation = start;
+      finishLocation = finish;
+      if (start != "" && finish != "") {
+        _streamRides = _referenceRides.where('starting_point', isEqualTo: start).where('finishing_point', isEqualTo: finish).snapshots();
+      } else if (start != "") {
+        _streamRides = _referenceRides.where('starting_point', isEqualTo: start).snapshots();
+      } else if (finish != "") {
+        _streamRides = _referenceRides.where('finishing_point', isEqualTo: finish).snapshots();
+      }
+      print("$startLocation$finishLocation$startLocation$finishLocation");
+      _handleDataRecieved(false);
     });
   }
 
@@ -40,7 +58,7 @@ class _FindRideScreenState extends State<FindRideScreen> {
             OfferOverviewCustom(isFilterShown: isFilterShown, onDataRecieved: _handleDataRecieved),
             Visibility(
               visible: isFilterShown,
-              child: const FilterDropdownCustom(),
+              child: FilterDropdownCustom(onSearchClicked: _handleFilterData),
             ),
             Expanded(
               child: StreamBuilder(
