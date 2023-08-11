@@ -49,71 +49,7 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
               DetailsCard2(screenWidth: screenWidth, ride: widget.ride, user: widget.user),
               DetailsCard3(screenWidth: screenWidth, ride: widget.ride),
               StopPointsCustom(screenWidth: screenWidth, ride: widget.ride),
-              DetailsCard4(
-                screenWidth: screenWidth,
-                streamRiders: _streamRiders,
-                user: widget.user,
-              ),
-              FutureBuilder(
-                  future: checkIfRiderIsInRide(getLoggedUserReference(), widget.ride),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    } else if (snapshot.hasError) {
-                      return Text('Error: ${snapshot.error}');
-                    } else {
-                      bool isRiderInRide = snapshot.data ?? false;
-                      return Container(
-                        margin: const EdgeInsets.symmetric(vertical: 20),
-                        child: isRiderInRide
-                            ? LargeButtonCustom(
-                                onTap: () async {
-                                  if (widget.ride.userId == FirebaseAuth.instance.currentUser!.uid) {
-                                    Navigator.push(
-                                      context,
-                                      UnanimatedRoute(builder: (context) => EditRideScreen(ride: widget.ride)),
-                                    );
-                                  } else {
-                                    final res = await removeUserFromRide(FirebaseAuth.instance.currentUser!.uid, widget.ride.id);
-                                    Fluttertoast.showToast(
-                                      msg: res == true ? "Uspješno ste uklonjeni!" : "Greška. Pokušajte ponovo.",
-                                      toastLength: Toast.LENGTH_SHORT,
-                                      gravity: ToastGravity.BOTTOM,
-                                      backgroundColor: res == true ? const Color(0xFF528C9E) : const Color(0xFFA41723),
-                                      textColor: Colors.white,
-                                    );
-                                    if (res == true) {
-                                      setState(() {
-                                        isRiderInRide = false;
-                                      });
-                                    }
-                                  }
-                                },
-                                btnText:
-                                    widget.ride.userId == FirebaseAuth.instance.currentUser!.uid ? "Uredi vožnju" : "Odustani od vožnje",
-                                isRed: widget.ride.userId != FirebaseAuth.instance.currentUser!.uid,
-                              )
-                            : LargeButtonCustom(
-                                onTap: () async {
-                                  final res = await addRiderToThisRide(getLoggedUserReference(), widget.ride.id);
-
-                                  Fluttertoast.showToast(
-                                    msg: res == true ? "Uspješno ste se pridružili!" : "Greška. Pokušajte ponovo.",
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    gravity: ToastGravity.BOTTOM,
-                                    backgroundColor: res == true ? const Color(0xFF528C9E) : const Color(0xFFA41723),
-                                    textColor: Colors.white,
-                                  );
-                                  if (res == true) {
-                                    setState(() {
-                                      isRiderInRide = true;
-                                    });
-                                  }
-                                },
-                                btnText: "Pridruži se ovoj vožnji"),
-                      );
-                    }
-                  })
+              DetailsCard4(screenWidth: screenWidth, streamRiders: _streamRiders, user: widget.user, ride: widget.ride),
             ],
           ),
         ),
@@ -423,16 +359,30 @@ class DetailsCard3 extends StatelessWidget {
   }
 }
 
-class DetailsCard4 extends StatelessWidget {
-  const DetailsCard4({super.key, required this.screenWidth, required this.streamRiders, required this.user});
+class DetailsCard4 extends StatefulWidget {
+  const DetailsCard4({
+    super.key,
+    required this.screenWidth,
+    required this.streamRiders,
+    required this.user,
+    required this.ride,
+  });
+
   final double screenWidth;
   final dynamic streamRiders;
   final UserC user;
+  final Ride ride;
 
+  @override
+  State<DetailsCard4> createState() => _DetailsCard4State();
+}
+
+class _DetailsCard4State extends State<DetailsCard4> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: screenWidth * 0.9,
+      margin: const EdgeInsets.only(bottom: 20),
+      width: widget.screenWidth * 0.9,
       decoration: BoxDecoration(
         color: const Color(0xFFEEEEEE),
         borderRadius: BorderRadius.circular(16),
@@ -441,7 +391,7 @@ class DetailsCard4 extends StatelessWidget {
             color: Colors.black.withOpacity(0.3),
             blurRadius: 4,
             offset: const Offset(2, 4),
-          )
+          ),
         ],
       ),
       child: Column(
@@ -451,13 +401,16 @@ class DetailsCard4 extends StatelessWidget {
             width: 200,
             decoration: BoxDecoration(
               color: const Color(0xFF444444),
-              borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), bottomRight: Radius.circular(16)),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(16),
+                bottomRight: Radius.circular(16),
+              ),
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.3),
                   blurRadius: 4,
                   offset: const Offset(2, 4),
-                )
+                ),
               ],
             ),
             child: const Padding(
@@ -480,48 +433,126 @@ class DetailsCard4 extends StatelessWidget {
             ),
           ),
           StreamBuilder<QuerySnapshot>(
-              stream: streamRiders,
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Text(snapshot.error.toString());
-                }
-                if (!snapshot.hasData) {
-                  return const CircularProgressIndicator();
-                }
-                final riders = snapshot.data!.docs;
+            stream: widget.streamRiders,
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              }
+              if (!snapshot.hasData) {
+                return const CircularProgressIndicator();
+              }
+              final riders = snapshot.data!.docs;
 
-                return SizedBox(
-                  width: 380,
-                  height: riders.length == 1 ? 60 : (riders.length - 1) * 91, // first rider is ride organizer
-                  child: riders.length == 1
-                      ? const Center(child: Text("Još nema drugih bajkera na ovoj vožnji."))
-                      : ListView.builder(
-                          itemCount: riders.length,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            final riderRef = riders[index]['user_id'] as DocumentReference;
+              return Column(
+                children: [
+                  SizedBox(
+                    width: 380,
+                    height: riders.length == 1 ? 60 : (riders.length - 1) * 91,
+                    child: riders.length == 1
+                        ? const Center(child: Text("Još nema drugih bajkera na ovoj vožnji."))
+                        : ListView.builder(
+                            itemCount: riders.length,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              final riderRef = riders[index]['user_id'] as DocumentReference;
 
-                            return FutureBuilder<DocumentSnapshot>(
-                              future: riderRef.get(),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState == ConnectionState.waiting) {
-                                  return const CircularProgressIndicator();
-                                }
+                              return FutureBuilder<DocumentSnapshot>(
+                                future: riderRef.get(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState == ConnectionState.waiting) {
+                                    return const CircularProgressIndicator();
+                                  }
 
-                                if (snapshot.hasData && snapshot.data!.exists) {
-                                  final riderObject = UserC.fromDocument(snapshot.data!);
+                                  if (snapshot.hasData && snapshot.data!.exists) {
+                                    final riderObject = UserC.fromDocument(snapshot.data!);
 
-                                  return riderObject.uid != user.uid
-                                      ? UserCardCustom(user: riderObject, setWidth: 290)
-                                      : const SizedBox(height: 0);
-                                } else {
-                                  return const Text('User not found');
-                                }
-                              },
-                            );
-                          }),
-                );
-              })
+                                    return riderObject.uid != widget.user.uid
+                                        ? UserCardCustom(user: riderObject, setWidth: 290)
+                                        : const SizedBox(height: 0);
+                                  } else {
+                                    return const Text('User not found');
+                                  }
+                                },
+                              );
+                            },
+                          ),
+                  ),
+                  FutureBuilder<bool>(
+                    future: checkIfRiderIsInRide(getLoggedUserReference(), widget.ride),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      } else if (snapshot.hasError) {
+                        return Text('Error: ${snapshot.error}');
+                      } else {
+                        bool isRiderInRide = snapshot.data ?? false;
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 20, top: 10),
+                          child: isRiderInRide
+                              ? LargeButtonCustom(
+                                  onTap: () async {
+                                    if (widget.ride.userId == FirebaseAuth.instance.currentUser!.uid) {
+                                      Navigator.push(
+                                        context,
+                                        UnanimatedRoute(builder: (context) => EditRideScreen(ride: widget.ride)),
+                                      );
+                                    } else {
+                                      final res = await removeUserFromRide(FirebaseAuth.instance.currentUser!.uid, widget.ride.id);
+                                      Fluttertoast.showToast(
+                                        msg: res == true ? "Uspješno ste uklonjeni!" : "Greška. Pokušajte ponovo.",
+                                        toastLength: Toast.LENGTH_SHORT,
+                                        gravity: ToastGravity.BOTTOM,
+                                        backgroundColor: res == true ? const Color(0xFF528C9E) : const Color(0xFFA41723),
+                                        textColor: Colors.white,
+                                      );
+                                      if (res == true) {
+                                        setState(() {
+                                          isRiderInRide = false;
+                                        });
+                                      }
+                                    }
+                                  },
+                                  btnText:
+                                      widget.ride.userId == FirebaseAuth.instance.currentUser!.uid ? "Uredi vožnju" : "Odustani od vožnje",
+                                  isRed: widget.ride.userId != FirebaseAuth.instance.currentUser!.uid,
+                                )
+                              : Column(
+                                  children: [
+                                    widget.ride.maxPeople == 0 || riders.length != (widget.ride.maxPeople + 1) // 0 = no people limit
+                                        ? LargeButtonCustom(
+                                            onTap: () async {
+                                              final res = await addRiderToThisRide(getLoggedUserReference(), widget.ride.id);
+
+                                              Fluttertoast.showToast(
+                                                msg: res == true ? "Uspješno ste se pridružili!" : "Greška. Pokušajte ponovo.",
+                                                toastLength: Toast.LENGTH_SHORT,
+                                                gravity: ToastGravity.BOTTOM,
+                                                backgroundColor: res == true ? const Color(0xFF528C9E) : const Color(0xFFA41723),
+                                                textColor: Colors.white,
+                                              );
+                                              if (res == true) {
+                                                setState(() {
+                                                  isRiderInRide = true;
+                                                });
+                                              }
+                                            },
+                                            btnText: "Pridruži se ovoj vožnji",
+                                          )
+                                        : const Center(
+                                            child: Text(
+                                            "Sva su mjesta zauzeta.",
+                                            style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18, color: Color(0xFF444444)),
+                                          ))
+                                  ],
+                                ),
+                        );
+                      }
+                    },
+                  ),
+                ],
+              );
+            },
+          ),
         ],
       ),
     );
