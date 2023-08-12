@@ -123,13 +123,9 @@ class _EditRideScreenState extends State<EditRideScreen> {
                 isLight: true,
                 isSmall: true,
                 rightOnTap: () async {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
                   final res = await deleteRide(widget.ride.id);
-                  if (res == true) {
-                    // ignore: use_build_context_synchronously
-                    Navigator.pop(context);
-                    // ignore: use_build_context_synchronously
-                    Navigator.pop(context);
-                  }
                   Fluttertoast.showToast(
                     msg: res == true ? "Uspješno izbrisana vožnja." : "Došlo je do greške. Pokušajte ponovo.",
                     toastLength: Toast.LENGTH_SHORT,

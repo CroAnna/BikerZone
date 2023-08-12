@@ -61,12 +61,16 @@ class _MyRidesScreenState extends State<MyRidesScreen> {
                           itemBuilder: (context, index) {
                             final ride = rides[index];
                             final rideRef = ride['ride_ref'] as DocumentReference;
-
                             return FutureBuilder(
                                 future: rideRef.get(),
                                 builder: (context, snapshot) {
                                   if (snapshot.connectionState == ConnectionState.waiting) {
                                     return const CircularProgressIndicator();
+                                  }
+                                  if (!snapshot.hasData) {
+                                    return const SizedBox(
+                                      width: 0,
+                                    );
                                   }
                                   if (snapshot.hasData && snapshot.data!.exists) {
                                     final rideObject = Ride.fromDocument(snapshot.data!);
@@ -76,14 +80,14 @@ class _MyRidesScreenState extends State<MyRidesScreen> {
                                         rideObject.userId,
                                         (snapshot) => UserC.fromDocument(snapshot),
                                       ),
-                                      builder: (context, snapshot) {
-                                        if (!snapshot.hasData) {
+                                      builder: (context, userSnapshot) {
+                                        if (!userSnapshot.hasData) {
                                           return const SizedBox(
                                             width: 0,
                                           );
                                         }
-                                        if (snapshot.hasData) {
-                                          final data = snapshot.data!;
+                                        if (userSnapshot.hasData) {
+                                          final data = userSnapshot.data!;
                                           return RideCardCustom(ride: rideObject, user: data);
                                         } else {
                                           return const SizedBox(
