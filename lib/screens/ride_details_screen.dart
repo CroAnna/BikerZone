@@ -27,10 +27,12 @@ class RideDetailsScreen extends StatefulWidget {
 
 class _RideDetailsScreenState extends State<RideDetailsScreen> {
   late Stream<QuerySnapshot> _streamRiders;
+  late Stream<DocumentSnapshot?> _streamRide;
 
   @override
   void initState() {
     super.initState();
+    _streamRide = FirebaseFirestore.instance.collection('rides').doc(widget.ride.id).snapshots();
     _streamRiders = FirebaseFirestore.instance.collection('rides').doc(widget.ride.id).collection('riders').snapshots();
   }
 
@@ -45,11 +47,30 @@ class _RideDetailsScreenState extends State<RideDetailsScreen> {
           child: Column(
             children: [
               TopNavigationCustom(leftIcon: Icons.arrow_back, mainText: "Detalji", rightIcon: null),
-              DetailsCard1(screenWidth: screenWidth, ride: widget.ride, user: widget.user),
-              DetailsCard2(screenWidth: screenWidth, ride: widget.ride, user: widget.user),
-              DetailsCard3(screenWidth: screenWidth, ride: widget.ride),
-              StopPointsCustom(screenWidth: screenWidth, ride: widget.ride),
-              DetailsCard4(screenWidth: screenWidth, streamRiders: _streamRiders, user: widget.user, ride: widget.ride),
+              StreamBuilder(
+                stream: _streamRide,
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
+
+                  if (!snapshot.hasData) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  final rideObject = Ride.fromDocument(snapshot.data!);
+
+                  return Column(
+                    children: [
+                      DetailsCard1(screenWidth: screenWidth, ride: rideObject, user: widget.user),
+                      DetailsCard2(screenWidth: screenWidth, ride: rideObject, user: widget.user),
+                      DetailsCard3(screenWidth: screenWidth, ride: rideObject),
+                      StopPointsCustom(screenWidth: screenWidth, ride: rideObject),
+                      DetailsCard4(screenWidth: screenWidth, streamRiders: _streamRiders, user: widget.user, ride: rideObject),
+                    ],
+                  );
+                },
+              )
             ],
           ),
         ),
