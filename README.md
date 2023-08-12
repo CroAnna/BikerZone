@@ -5,6 +5,8 @@ Introducing BikerZone: Connect and Ride Together!
 
 Rev up your engines and get ready for the ultimate biker experience with BikerZone! Whether you're a solo rider seeking adventure or a passionate group of bikers looking to unite, our app is your ticket to the open road and the camaraderie of fellow enthusiasts. Fuel your passion for motorcycles, forge new friendships, and create unforgettable memories, all at your fingertips.
 
+<img src="https://github.com/CroAnna/BikerZone/blob/main/lib/images/bikerzone_images_1.jpg" alt=""/>
+
 ## Key Features:
 
 ### 🏍️ Create your biker profile:
@@ -41,5 +43,15 @@ Download BikerZone soon and unlock the full potential of your biker spirit!
 
 Ready to ride together? Let's Roll!
 
+<img src="https://github.com/CroAnna/BikerZone/blob/main/lib/images/bikerzone_images_2.jpg" alt=""/>
+<img src="https://github.com/CroAnna/BikerZone/blob/main/lib/images/bikerzone_images_3.jpg" alt=""/>
+<img src="https://github.com/CroAnna/BikerZone/blob/main/lib/images/bikerzone_images_4.jpg" alt=""/>
+<img src="https://github.com/CroAnna/BikerZone/blob/main/lib/images/bikerzone_images_5.jpg" alt=""/>
+<img src="https://github.com/CroAnna/BikerZone/blob/main/lib/images/bikerzone_images_6.jpg" alt=""/>
+<img src="https://github.com/CroAnna/BikerZone/blob/main/lib/images/bikerzone_images_7.jpg" alt=""/>
 
+
+Icons are from <a href="https://www.flaticon.com/">Flaticon</a>
+
+Designed in Figma. 
 ![image](https://github.com/CroAnna/BikerZone/assets/90924342/9b969fa0-7203-4e21-8e59-d02383a5b826)
